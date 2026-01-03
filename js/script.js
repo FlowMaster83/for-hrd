@@ -85,3 +85,5 @@ document.querySelector(".clear-all-btn").addEventListener("click", () => {
     row.querySelector(".percent-value").textContent = "0";
   });
 });
+
+console.log(1)
