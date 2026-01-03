@@ -16,6 +16,7 @@ body {
 
 main {
   padding-top: calc(var(--header-height) + 30px);
+  padding-bottom: calc(var(--header-height) + 30px);
 }
 
 .layout {
@@ -57,6 +58,17 @@ main {
   gap: 10px;
 }
 
+.user-select {
+  height: 32px;
+  padding: 0 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
 /* Рядок шкали */
 .container {
   display: flex;
@@ -84,7 +96,6 @@ main {
 /* Шкала */
 .chart-wrapper {
   flex: 1;
-  position: relative;
   height: 24px;
 }
 
@@ -140,7 +151,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Для Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -217,11 +228,9 @@ button:hover {
 }
 
 /* ==========================================================================
-   НОВЕ: Стилі для маркера-кола
+   НОВЕ: Стилі для маркера
    ========================================================================== */
-/* Базовий стиль кола (спільний) */
-/* Базові параметри для всіх маркерів на шкалі */
-/* Базові стилі маркерів */
+
 .chart-marker {
   position: absolute;
   top: 50%;
@@ -232,10 +241,16 @@ button:hover {
   opacity: 0;
   z-index: 10;
   transition: opacity 0.2s ease, left 0.1s linear;
+  color: #ff0000;
 }
 
 .chart-marker.active {
   opacity: 1;
+}
+
+.marker-svg {
+  width: 50px;
+  height: 50px;
 }
 
 /* 1. Суцільне коло */
@@ -247,30 +262,24 @@ button:hover {
 
 /* 2. Пунктирне коло */
 .marker-dotted {
-  border: 3px dotted #ff0000;
+  border: 3px dashed #ff0000;
   border-radius: 50%;
   box-sizing: border-box;
 }
 
 /* 3. Контурна восьмикутна зірка */
 .marker-star {
-  width: 50px;
-  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
 }
 
-.marker-star::before,
-.marker-star::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
+.marker-star .marker-svg {
   width: 100%;
   height: 100%;
-  border: 2px solid #ff0000;
-  box-sizing: border-box;
-}
-
-.marker-star::after {
-  transform: rotate(45deg); /* Поворот другого квадрата для створення 8 кутів */
+  color: #ff0000; /* SVG берёт цвет через currentColor */
 }
 
 /* Стилізація активного стану кнопок для JS */
@@ -279,8 +288,6 @@ button:hover {
   border-color: #ff0000 !important;
 }
 
-/* Обов'язково для chart-wrapper */
 .chart-wrapper {
   position: relative;
-  /* ... ваші інші стилі ... */
 }

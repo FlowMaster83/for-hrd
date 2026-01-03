@@ -1,44 +1,4 @@
-.ref {
+.test-ref {
   color: red;
   text-decoration: none;
-}
-
-.position {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.main-scale {
-  width: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-}
-
-.scale {
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px;
-  width: 100%;
-}
-
-.ticks {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(35% + 4px);
-  width: auto;
-
-  display: flex;
-  justify-content: space-between;
-
-  font-size: 11px;
-  color: #898989;
-  pointer-events: none;
 }
