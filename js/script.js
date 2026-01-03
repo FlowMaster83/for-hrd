@@ -49,6 +49,7 @@ function createScale(label) {
       </div>
     </div>
     <input class="user-input" type="number" name="user-value" placeholder="0" min="0" max="100" inputmode="numeric"/>
+    <button class="clear-btn" type="button">CLEAR</button>
     <button>STAR</button>
     <button>CIRCLE</button>
     <button>POINTER</button>
@@ -90,5 +91,36 @@ container.addEventListener("input", function (e) {
   }
 });
 
+container.addEventListener("click", function (e) {
+  if (e.target.classList.contains("clear-btn")) {
+    const row = e.target.closest(".scale-row");
+    const input = row.querySelector(".user-input");
+    const percent = row.querySelector(".percent-value");
+    const fill = row.querySelector(".chart-fill");
 
-console.log(1)
+    input.value = "";
+    input.placeholder = "0";
+    percent.textContent = "0";
+    fill.style.width = "0%";
+    input.focus();
+  }
+});
+
+const clearAllBtn = document.querySelector(".clear-all-btn");
+
+const onClickClearAllBtn = () => {
+  const rows = document.querySelectorAll(".scale-row");
+
+  rows.forEach((row) => {
+    const input = row.querySelector(".user-input");
+    const percent = row.querySelector(".percent-value");
+    const fill = row.querySelector(".chart-fill");
+
+    input.value = "";
+    input.placeholder = "0";
+    percent.textContent = "0";
+    fill.style.width = "0%";
+  });
+};
+
+clearAllBtn.addEventListener("click", onClickClearAllBtn);
