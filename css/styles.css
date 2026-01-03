@@ -122,12 +122,26 @@ main {
 
 /* Елементи керування */
 .user-input {
+  margin-left: 50px;
   width: 50px;
   height: 32px;
   text-align: center;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-weight: 700;
+}
+
+/* прибираємо стрілки */
+/* Для Chrome, Safari, Edge та Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Для Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 button {
@@ -173,6 +187,7 @@ button:hover {
   /* 2. Шкала + відступ 20px + Інпут + відступ 20px + CLEAR */
   .chart-wrapper {
     margin-right: 20px; /* Відступ від шкали до інпуту */
+    position: relative;
   }
 
   .user-input {
@@ -193,10 +208,79 @@ button:hover {
     padding: 15px 0;
   }
   .header .layout {
-    flex-direction: column;
+    flex-direction: row;
     gap: 15px;
   }
   main {
     padding-top: 150px;
   }
+}
+
+/* ==========================================================================
+   НОВЕ: Стилі для маркера-кола
+   ========================================================================== */
+/* Базовий стиль кола (спільний) */
+/* Базові параметри для всіх маркерів на шкалі */
+/* Базові стилі маркерів */
+.chart-marker {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity 0.2s ease, left 0.1s linear;
+}
+
+.chart-marker.active {
+  opacity: 1;
+}
+
+/* 1. Суцільне коло */
+.marker-solid {
+  border: 3px solid #ff0000;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* 2. Пунктирне коло */
+.marker-dotted {
+  border: 3px dotted #ff0000;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* 3. Контурна восьмикутна зірка */
+.marker-star {
+  width: 50px;
+  height: 50px;
+}
+
+.marker-star::before,
+.marker-star::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ff0000;
+  box-sizing: border-box;
+}
+
+.marker-star::after {
+  transform: rotate(45deg); /* Поворот другого квадрата для створення 8 кутів */
+}
+
+/* Стилізація активного стану кнопок для JS */
+.btn-active-red {
+  background-color: #ffe6e6 !important;
+  border-color: #ff0000 !important;
+}
+
+/* Обов'язково для chart-wrapper */
+.chart-wrapper {
+  position: relative;
+  /* ... ваші інші стилі ... */
 }
