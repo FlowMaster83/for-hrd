@@ -141,7 +141,7 @@ main {
   display: flex;
   grid-area: value;
   align-items: center;
-  gap: 10px;
+  gap: 24px;
   flex: 1; /* шкала тянется */
   min-width: 0;
 }
@@ -392,6 +392,10 @@ button:hover {
   .scale-row .actions .clear-btn {
     flex: 2;
   }
+
+  .scale-row .value {
+    gap: 12px;
+  }
 }
 
 /* STATE C — stacked layout, simplified scale */
@@ -429,6 +433,10 @@ button:hover {
     background-color: var(--tick-color);
 
     transform: translateX(-50%);
+  }
+
+  .scale-row .value {
+    gap: 10px;
   }
 }
 
