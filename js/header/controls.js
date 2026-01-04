@@ -1,20 +1,23 @@
 // Керування
 
+import { createHeaderControls } from "./createHeaderControls.js";
+
 export function initHeaderControls() {
-  const mainSelect = document.getElementById("main-select");
-  const fillBtn = document.querySelector(".fill-btn");
-  const clearAllBtn = document.querySelector(".clear-all-btn");
+  const controls = createHeaderControls("header-controls-root");
+  if (!controls) return;
+
+  const { select, fillBtn, clearBtn } = controls;
 
   const updateFillButtonState = () => {
-    fillBtn.disabled = !mainSelect.value || Number(mainSelect.value) < 1;
+    fillBtn.disabled = !select.value || Number(select.value) < 1;
   };
 
-  mainSelect.addEventListener("change", updateFillButtonState);
+  select.addEventListener("change", updateFillButtonState);
   updateFillButtonState();
 
   fillBtn.addEventListener("click", () => {
-    const val = Number(mainSelect.value);
-    if (!val || val < 1 || val > 100) return;
+    const val = Number(select.value);
+    if (!val) return;
 
     document.querySelectorAll(".scale-row").forEach((row) => {
       const input = row.querySelector(".user-input");
@@ -24,12 +27,12 @@ export function initHeaderControls() {
     });
   });
 
-  clearAllBtn.addEventListener("click", () => {
+  clearBtn.addEventListener("click", () => {
     document
       .querySelectorAll(".scale-row .clear-btn")
       .forEach((btn) => btn.click());
 
-    mainSelect.value = "";
+    select.value = "";
     updateFillButtonState();
   });
 }

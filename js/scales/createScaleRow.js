@@ -69,15 +69,6 @@ export function createScaleRow(labelTitle, container) {
   />
 </svg>
 </div>
-
-          <div class="ticks">
-            ${Array.from(
-              { length: 11 },
-              (_, i) => `
-              <span class="tick" style="left:${i * 10}%">${i * 10}</span>
-            `
-            ).join("")}
-          </div>
         </div>
       </div>
 
