@@ -1,0 +1,29 @@
+/* BASE / TOKENS */
+:root {
+  --layout-max-width: 1200px;
+  --layout-padding: 20px;
+
+  --header-height: 72px;
+
+  --primary-blue: #0059b3;
+  --bg-color: #f9f9f9;
+
+  --tick-step: 10;
+  --tick-width: 1px;
+  --tick-color: rgba(0, 0, 0, 0.15);
+}
+
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Geologica", sans-serif;
+  font-size: 14px;
+  background: var(--bg-color);
+  color: #333;
+}

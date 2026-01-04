@@ -1,0 +1,75 @@
+@media (max-width: 1024px) {
+  .scale-row {
+    grid-template-columns: 240px 1fr;
+    grid-template-areas:
+      "label value"
+      ".     actions";
+    row-gap: 20px;
+  }
+
+  .scale-row .actions {
+    justify-self: start;
+    width: 100%;
+  }
+
+  .scale-row .actions button {
+    flex: 1;
+    height: 44px;
+  }
+
+  .scale-row .actions .clear-btn {
+    flex: 2;
+  }
+
+  .scale-row .value {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .scale-row {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "label"
+      "value"
+      "actions";
+    row-gap: 12px;
+  }
+
+  .scale-row .label {
+    white-space: normal;
+    width: auto;
+  }
+
+  .tick {
+    display: none;
+  }
+
+  .tick:nth-child(1),
+  .tick:nth-child(6),
+  .tick:nth-child(11) {
+    display: block;
+  }
+
+  .chart-track::before {
+    background-image: none;
+    left: 50%;
+    width: var(--tick-width);
+    background-color: var(--tick-color);
+    transform: translateX(-50%);
+  }
+
+  .scale-row .value {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 512px) {
+  :root {
+    --header-height: 60px;
+  }
+
+  .main-logo {
+    font-size: 18px;
+  }
+}
