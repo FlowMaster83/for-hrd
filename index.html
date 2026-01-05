@@ -22,7 +22,8 @@
     />
 
     <!-- Стилі -->
-    <link rel="stylesheet" href="./src/css/styles.css" />
+    <link rel="stylesheet" href="./src/css/modal.css" />
+    <link rel="stylesheet" href="./src/css/main.css" />
     <title>Шкала показників HireBox</title>
   </head>
   <body>
@@ -31,11 +32,18 @@
         <a href="./" class="main-logo" aria-label="HOME"> HireBox&trade; </a>
         <div id="header-controls-root"></div>
       </div>
+      <button data-open-modal>RESULTS</button>
     </header>
 
     <main>
       <section class="layout">
-        <div class="container" id="scales-container"></div>
+        <div class="container" id="scaleRoot">
+          <div class="main-logo main-logo--report">HireBox&trade;</div>
+
+          <div class="scales-wrapper">
+            <div id="scales-container"></div>
+          </div>
+        </div>
       </section>
     </main>
 
