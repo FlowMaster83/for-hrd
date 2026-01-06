@@ -28,6 +28,10 @@
   cursor: pointer;
 }
 
+.main-logo--report {
+  display: none;
+}
+
 .main-logo:hover {
   opacity: 0.85;
 }

@@ -1,5 +1,3 @@
-// src/js/components/markers.js
-
 export const MARKER_SVGS = {
   star: `
     <svg
@@ -54,8 +52,6 @@ export const MARKER_SVGS = {
 </svg>
   `,
 };
-
-// src/js/components/markers.js
 
 export function createMarker(type) {
   const el = document.createElement("div");

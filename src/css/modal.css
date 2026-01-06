@@ -1,35 +1,120 @@
-.modal-backdrop {
+/* =========================================================
+   MODAL (SCROLLABLE RESULTS)
+========================================================= */
+
+.modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
   z-index: 9999;
-  padding: 40px;
-  overflow: auto;
+  display: none;
+}
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.modal__content {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  max-width: 960px;
+  width: calc(100% - 32px);
+  max-height: 90vh;
+
+  margin: 5vh auto;
+  padding: 0;
+
+  background: #fff;
+  border-radius: 8px;
+}
+
+/* header — фиксированный */
+.modal__header {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal__logo {
+  font-weight: 700;
+  font-size: 16px;
+  color: red;
+}
+
+/* тело скроллится */
+.modal__body {
+  flex: 1;
+  overflow-y: auto;
+
+  padding: 16px 20px 24px;
 }
 
 .modal {
-  background: #fff;
-  max-width: var(--layout-max-width);
-  margin: 0 auto;
-  border-radius: 12px;
+  display: none;
 }
 
-.modal-viewport {
-  padding: var(--layout-padding);
+.modal.is-open {
+  display: block;
 }
 
-.modal .view-only {
-  pointer-events: none;
+
+/* =========================================================
+   RESULTS LAYOUT
+========================================================= */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* view-only режим */
-.view-only {
-  pointer-events: none;
+/* одна строка */
+.result-row {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  align-items: center;
 }
 
-.view-only input,
-.view-only button,
-.view-only .controls,
-.view-only header {
-  display: none !important;
+/* левая часть */
+.result-label {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.result-value {
+  font-weight: 600;
+  color: var(--primary-blue, #0059b3);
+}
+
+/* правая часть — шкала */
+.result-scale .chart-wrapper {
+  width: 100%;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  .modal__content {
+    max-width: 100%;
+    margin: 0;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .result-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }

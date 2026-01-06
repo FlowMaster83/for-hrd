@@ -1,5 +1,4 @@
-// Керування
-
+// header/controls.js
 import { createHeaderControls } from "./createHeaderControls.js";
 
 export function initHeaderControls() {
@@ -16,12 +15,14 @@ export function initHeaderControls() {
   updateFillButtonState();
 
   fillBtn.addEventListener("click", () => {
-    const val = Number(select.value);
-    if (!val) return;
+    const value = Number(select.value);
+    if (!value) return;
 
     document.querySelectorAll(".scale-row").forEach((row) => {
       const input = row.querySelector(".user-input");
-      input.value = val;
+      if (!input) return;
+
+      input.value = value;
       input.dispatchEvent(new Event("input", { bubbles: true }));
       input.dispatchEvent(new Event("blur", { bubbles: true }));
     });

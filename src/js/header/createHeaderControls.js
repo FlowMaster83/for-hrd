@@ -1,18 +1,21 @@
+// header/createHeaderControls.js
 export function createHeaderControls(rootId) {
   const root = document.getElementById(rootId);
   if (!root) return null;
+
+  root.innerHTML = "";
 
   const wrapper = document.createElement("div");
   wrapper.className = "header-options";
 
   // label
-  const labelText = document.createElement("p");
-  labelText.textContent = "Fill all:";
+  const label = document.createElement("p");
+  label.className = "header-label";
+  label.textContent = "Fill all:";
 
   // select
   const select = document.createElement("select");
   select.className = "user-select";
-  select.id = "main-select";
 
   const placeholder = document.createElement("option");
   placeholder.value = "";
@@ -41,14 +44,26 @@ export function createHeaderControls(rootId) {
   clearBtn.type = "button";
   clearBtn.textContent = "CLEAR ALL";
 
+  const resultBtn = document.createElement("button");
+  resultBtn.className = "header-result-btn";
+  resultBtn.type = "button";
+  resultBtn.textContent = "RESULT";
+  resultBtn.dataset.openModal = "true";
+
   wrapper.append(
-    labelText,
+    label,
     select,
     fillBtn,
-    clearBtn
+    clearBtn,
+    resultBtn
   );
 
   root.appendChild(wrapper);
 
-  return { select, fillBtn, clearBtn };
+  return {
+    select,
+    fillBtn,
+    clearBtn,
+    resultBtn,
+  };
 }
