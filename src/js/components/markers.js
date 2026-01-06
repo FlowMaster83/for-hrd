@@ -53,9 +53,17 @@ export const MARKER_SVGS = {
   `,
 };
 
-export function createMarker(type) {
+/**
+ * Создаёт маркер шкалы
+ * @param {string} type - тип маркера (star, check)
+ * @param {number} value - значение в процентах (0–100)
+ */
+export function createMarker(type, value) {
   const el = document.createElement("div");
+
   el.className = `chart-marker marker-${type}`;
+  el.dataset.value = value; // 🔑 ИСТОЧНИК ИСТИНЫ
+  el.style.left = `${value}%`; // 🔑 ВИЗУАЛЬНАЯ ПОЗИЦИЯ
 
   if (MARKER_SVGS[type]) {
     el.innerHTML = MARKER_SVGS[type];

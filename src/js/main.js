@@ -6,5 +6,3 @@ document.addEventListener("DOMContentLoaded", () => {
   initScales();
   initHeaderControls();
 });
-
-initHeaderControls();
