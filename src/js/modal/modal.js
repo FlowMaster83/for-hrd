@@ -75,7 +75,6 @@ export function closeModal() {
   lastActiveElement = null;
 }
 
-
 /* =========================================
    GLOBAL EVENTS
 ========================================= */

@@ -107,19 +107,19 @@
 }
 
 .modal__close {
-  width: 40px; /* ⬅ больше */
+  width: 40px;
   height: 40px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 28px; /* ⬅ крупнее крест */
+  font-size: 28px;
   line-height: 1;
 
-  background: none; /* ⬅ без рамки */
+  background: none;
   border: none;
-  border-radius: 0; /* ⬅ без кружка */
+  border-radius: 0;
 
   cursor: pointer;
   color: #333;
