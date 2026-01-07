@@ -1,6 +1,6 @@
 .scale-row {
   display: grid;
-  grid-template-columns: 240px 1fr auto;
+  grid-template-columns: 200px 1fr auto;
   grid-template-areas: "label value actions";
   column-gap: 12px;
   align-items: center;

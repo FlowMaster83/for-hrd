@@ -5,5 +5,9 @@ import { createScaleRow } from "./createScaleRow.js";
 
 export function initScales() {
   const container = document.getElementById("scales-container");
-  LABELS.forEach((label) => createScaleRow(label, container));
+  const currentLang = "ua"; // позже будет меняться
+
+  LABELS[currentLang].forEach((label) => {
+    createScaleRow(label, container);
+  });
 }

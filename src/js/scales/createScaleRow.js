@@ -11,7 +11,8 @@ export function createScaleRow(labelTitle, container) {
 
   row.innerHTML = `
     <div class="label">
-      ${labelTitle}: <span class="percent-value">0</span>
+    <span class="scale-label">${labelTitle}</span>:
+    <span class="percent-value">0</span>
     </div>
 
     <div class="value">

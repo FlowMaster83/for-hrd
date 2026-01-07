@@ -8,12 +8,18 @@ export function createHeaderControls(rootId) {
   const wrapper = document.createElement("div");
   wrapper.className = "header-options";
 
-  // label
+  /* -----------------------------
+     LABEL
+  ----------------------------- */
+
   const label = document.createElement("p");
   label.className = "header-label";
   label.textContent = "Fill all:";
 
-  // select
+  /* -----------------------------
+     SELECT
+  ----------------------------- */
+
   const select = document.createElement("select");
   select.className = "user-select";
 
@@ -32,7 +38,10 @@ export function createHeaderControls(rootId) {
     select.appendChild(option);
   }
 
-  // buttons
+  /* -----------------------------
+     BUTTONS
+  ----------------------------- */
+
   const fillBtn = document.createElement("button");
   fillBtn.className = "fill-btn";
   fillBtn.type = "button";
@@ -50,13 +59,20 @@ export function createHeaderControls(rootId) {
   resultBtn.textContent = "RESULT";
   resultBtn.dataset.openModal = "true";
 
-  wrapper.append(
-    label,
-    select,
-    fillBtn,
-    clearBtn,
-    resultBtn
-  );
+  /* -----------------------------
+     LANGUAGE TOGGLE
+  ----------------------------- */
+
+  const langBtn = document.createElement("button");
+  langBtn.className = "lang-toggle-btn";
+  langBtn.type = "button";
+  langBtn.textContent = "UA"; // стартовый язык
+
+  /* -----------------------------
+     APPEND
+  ----------------------------- */
+
+  wrapper.append(label, select, fillBtn, clearBtn, resultBtn, langBtn);
 
   root.appendChild(wrapper);
 
@@ -65,5 +81,6 @@ export function createHeaderControls(rootId) {
     fillBtn,
     clearBtn,
     resultBtn,
+    langBtn,
   };
 }

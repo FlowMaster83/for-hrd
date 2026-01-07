@@ -11,65 +11,12 @@ export function renderModalResults() {
 
   const scaleRows = document.querySelectorAll(".scale-row");
 
-  scaleRows.forEach((row, index) => {
-    const resultRow = renderResultRow(row, index + 1);
+  scaleRows.forEach((row) => {
+    const resultRow = renderResultRow(row);
     container.appendChild(resultRow);
   });
 
   return container;
-}
-
-
-/* =========================================================
-   DATA EXTRACTION
-========================================================= */
-
-/**
- * Извлекает состояние одной шкалы напрямую из DOM
- * (включая маркеры, даже если пользователь не менял значение)
- */
-function extractScaleData(row) {
-  const labelEl = row.querySelector(".label");
-  const valueEl = row.querySelector(".percent-value");
-  const fillEl = row.querySelector(".chart-fill");
-  const markerEls = row.querySelectorAll(".chart-marker"); // ✅ ВАЖНО
-
-  const title = labelEl
-    ? labelEl.childNodes[0].textContent.trim().replace(":", "")
-    : "";
-
-  const value = valueEl ? Number(valueEl.textContent) : 0;
-
-  const fillWidth = fillEl
-    ? parseFloat(fillEl.style.width) || value
-    : value;
-
-  const markers = Array.from(markerEls)
-    .map((marker) => ({
-      value: Number(marker.dataset.value),
-      className: marker.className,
-      svg: marker.innerHTML,
-    }))
-    .filter((m) => !Number.isNaN(m.value));
-
-  return {
-    title,
-    value,
-    fillWidth,
-    markers,
-  };
-}
-
-
-/**
- * Определяет тип маркера из className
- * Пример: marker-star → star
- */
-function extractMarkerType(markerEl) {
-  const classList = Array.from(markerEl.classList);
-  const markerClass = classList.find((cls) => cls.startsWith("marker-"));
-
-  return markerClass ? markerClass.replace("marker-", "") : "";
 }
 
 /* =========================================================
@@ -79,20 +26,30 @@ function extractMarkerType(markerEl) {
 /**
  * Рендер одной read-only строки результата
  */
-function renderResultRow(rowSource, index) {
+function renderResultRow(rowSource) {
   const row = document.createElement("div");
   row.className = "result-row";
 
-  const labelEl = rowSource.querySelector(".label");
+  /* -----------------------------
+     SOURCE ELEMENTS
+  ----------------------------- */
+
+  const labelEl = rowSource.querySelector(".scale-label");
   const valueEl = rowSource.querySelector(".percent-value");
   const fillEl = rowSource.querySelector(".chart-fill");
   const trackEl = rowSource.querySelector(".chart-track");
 
-  const title = labelEl
-    ? labelEl.childNodes[0].textContent.trim().replace(":", "")
-    : "";
+  /* -----------------------------
+     DATA
+  ----------------------------- */
 
+  const title = labelEl ? labelEl.textContent : "";
   const value = valueEl ? valueEl.textContent : "0";
+  const fillWidth = fillEl?.style.width || "0%";
+
+  /* -----------------------------
+     BASE MARKUP
+  ----------------------------- */
 
   row.innerHTML = `
     <div class="result-label">
@@ -103,14 +60,18 @@ function renderResultRow(rowSource, index) {
     <div class="result-scale">
       <div class="chart-wrapper">
         <div class="chart-track">
-          <div class="chart-fill" style="width: ${fillEl?.style.width || "0%"}"></div>
+          <div class="chart-fill" style="width: ${fillWidth}"></div>
         </div>
       </div>
     </div>
   `;
 
-  /* 🔥 КЛОНИРУЕМ МАРКЕРЫ 1:1 */
+  /* -----------------------------
+     CLONE ACTIVE MARKERS 1:1
+  ----------------------------- */
+
   const targetTrack = row.querySelector(".chart-track");
+
   trackEl
     ?.querySelectorAll(".chart-marker.active")
     .forEach((marker) => {
@@ -118,30 +79,4 @@ function renderResultRow(rowSource, index) {
     });
 
   return row;
-}
-
-
-/* =========================================================
-   SUBPARTS
-========================================================= */
-
-/**
- * Рендер маркеров шкалы
- */
-function renderMarkers(markers) {
-  if (!markers.length) return "";
-
-  return markers
-    .map(
-      ({ value, className, svg }) => `
-        <div
-          class="${className} active"
-          style="left: ${value}%"
-          data-value="${value}"
-        >
-          ${svg}
-        </div>
-      `
-    )
-    .join("");
 }

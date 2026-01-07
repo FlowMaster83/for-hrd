@@ -1,11 +1,30 @@
 // header/controls.js
 import { createHeaderControls } from "./createHeaderControls.js";
+import { LABELS } from "../constants/labels.js";
+
+let currentLang = "ua";
+
+/**
+ * Обновляет подписи шкал без пересоздания DOM
+ */
+function updateScaleLabels() {
+  const labels = LABELS[currentLang];
+  const nodes = document.querySelectorAll(".scale-label");
+
+  nodes.forEach((el, index) => {
+    el.textContent = labels[index];
+  });
+}
 
 export function initHeaderControls() {
   const controls = createHeaderControls("header-controls-root");
   if (!controls) return;
 
-  const { select, fillBtn, clearBtn } = controls;
+  const { select, fillBtn, clearBtn, langBtn } = controls;
+
+  /* -----------------------------
+     FILL BUTTON LOGIC
+  ----------------------------- */
 
   const updateFillButtonState = () => {
     fillBtn.disabled = !select.value || Number(select.value) < 1;
@@ -28,6 +47,10 @@ export function initHeaderControls() {
     });
   });
 
+  /* -----------------------------
+     CLEAR BUTTON LOGIC
+  ----------------------------- */
+
   clearBtn.addEventListener("click", () => {
     document
       .querySelectorAll(".scale-row .clear-btn")
@@ -36,4 +59,19 @@ export function initHeaderControls() {
     select.value = "";
     updateFillButtonState();
   });
+
+  /* -----------------------------
+     LANGUAGE TOGGLE
+  ----------------------------- */
+
+  if (langBtn) {
+    langBtn.textContent = currentLang.toUpperCase();
+
+    langBtn.addEventListener("click", () => {
+      currentLang = currentLang === "ua" ? "en" : "ua";
+      langBtn.textContent = currentLang.toUpperCase();
+
+      updateScaleLabels();
+    });
+  }
 }
