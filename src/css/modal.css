@@ -1,5 +1,5 @@
 /* =========================================================
-   MODAL (SCROLLABLE RESULTS)
+   MODAL (DESKTOP ONLY)
 ========================================================= */
 
 .modal {
@@ -7,6 +7,10 @@
   inset: 0;
   z-index: 9999;
   display: none;
+}
+
+.modal.is-open {
+  display: block;
 }
 
 .modal__overlay {
@@ -32,7 +36,10 @@
   border-radius: 8px;
 }
 
-/* header — фиксированный */
+/* =========================================================
+   MODAL HEADER (TOP)
+========================================================= */
+
 .modal__header {
   flex-shrink: 0;
 
@@ -52,60 +59,6 @@
   color: red;
 }
 
-/* тело скроллится */
-.modal__body {
-  flex: 1;
-  overflow-y: auto;
-
-  padding: 20px 120px 20px;
-}
-
-.modal {
-  display: none;
-}
-
-.modal.is-open {
-  display: block;
-}
-
-/* =========================================================
-   RESULTS LAYOUT
-========================================================= */
-
-.results {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* одна строка */
-.result-row {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 24px;
-  align-items: center;
-}
-
-/* левая часть */
-.result-label {
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.result-value {
-  font-weight: 600;
-  color: var(--primary-blue, #0059b3);
-}
-
-/* правая часть — шкала */
-.result-scale .chart-wrapper {
-  width: 100%;
-}
-
-.result-scale .chart-track {
-  position: relative;
-}
-
 .modal__close {
   width: 40px;
   height: 40px;
@@ -119,35 +72,127 @@
 
   background: none;
   border: none;
-  border-radius: 0;
-
   cursor: pointer;
   color: #333;
 }
 
-/* аккуратный hover */
 .modal__close:hover {
   opacity: 0.6;
 }
 
 /* =========================================================
-   MOBILE
+   MODAL BODY
 ========================================================= */
 
+.modal__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 120px;
+}
+
+/* =========================================================
+   SCALE HEADER
+========================================================= */
+
+.modal-scale-head {
+  margin-bottom: 12px;
+}
+
+.scale-head-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: end;
+}
+
+/* .scale-head-spacer {
+  /* alignment column for labels */
+} */
+
+.scale-head-content {
+  position: relative;
+}
+
+.scale-head-levels {
+  display: grid;
+  grid-template-columns: 33% 34% 33%;
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+  margin-bottom: 4px;
+}
+
+.scale-head-values {
+  position: relative;
+  height: 14px;
+
+  font-size: 11px;
+  color: #888;
+}
+
+.scale-head-values .value {
+  position: absolute;
+  transform: translateX(-50%);
+  font-weight: 600;
+  color: var(--primary-blue, #0059b3);
+}
+
+.scale-head-values .v0 {
+  left: 1.5%;
+  transform: none;
+}
+
+.scale-head-values .v33 {
+  left: 33%;
+}
+
+.scale-head-values .v66 {
+  left: 66%;
+}
+
+.scale-head-values .v100 {
+  left: 100%;
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.result-label {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.result-value {
+  font-weight: 600;
+  color: var(--primary-blue, #0059b3);
+}
+
+.result-scale .chart-wrapper {
+  width: 100%;
+}
+
+.result-scale .chart-track {
+  position: relative;
+}
+
 @media (max-width: 768px) {
-  .modal__content {
-    max-width: 100%;
-    margin: 0;
-    height: 100vh;
-    border-radius: 0;
-  }
-
-  .result-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  .header-result-btn {
-    display: none;
+  [data-open-modal] {
+    display: none !important;
   }
 }
+

@@ -3,17 +3,14 @@
   text-decoration: none;
 }
 
-.modal__keys {
-  display: flex;
-  flex-direction: row;
-}
-
 .type {
   display: flex;
   flex-direction: row;
+  gap: 16px;
 }
 
 .percents {
   display: flex;
   flex-direction: row;
+  gap: 16px;
 }
