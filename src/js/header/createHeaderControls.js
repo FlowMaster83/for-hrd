@@ -25,7 +25,7 @@ export function createHeaderControls(rootId) {
 
   const placeholder = document.createElement("option");
   placeholder.value = "";
-  placeholder.textContent = "— select % —";
+  placeholder.textContent = "select %";
   placeholder.disabled = true;
   placeholder.hidden = true;
   placeholder.selected = true;
