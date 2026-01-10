@@ -2,7 +2,8 @@
 
 import { createMarker } from "../components/markers.js";
 
-const STEP = 1;
+const STEP_INPUT = 1;   // логика (инпут, стрелки)
+const STEP_TICK = 10;   // визуальные метки
 const MAX = 100;
 
 export function createScaleRow(labelTitle, container) {
@@ -59,12 +60,12 @@ export function createScaleRow(labelTitle, container) {
   const arrowRight = row.querySelector(".arrow-right");
 
   /* =========================
-     TICKS
+     TICKS (VISUAL ONLY)
   ========================= */
 
   const lineNodes = [];
 
-  for (let value = 0; value <= MAX; value += STEP) {
+  for (let value = 0; value <= MAX; value += STEP_TICK) {
     const tick = document.createElement("div");
     tick.className = "tick";
     tick.textContent = value;
@@ -92,10 +93,10 @@ export function createScaleRow(labelTitle, container) {
     const width = track.clientWidth;
     if (!width) return;
 
-    const stepPx = Math.round(width / (MAX / STEP));
+    const stepPx = width / (MAX / STEP_TICK);
 
     lineNodes.forEach(({ value, el }) => {
-      el.style.left = `${Math.round(stepPx * (value / STEP))}px`;
+      el.style.left = `${Math.round((value / STEP_TICK) * stepPx)}px`;
     });
   };
 
@@ -103,7 +104,7 @@ export function createScaleRow(labelTitle, container) {
   new ResizeObserver(layoutLines).observe(track);
 
   /* =========================
-     Markers
+     MARKERS
   ========================= */
 
   const markers = {
@@ -123,34 +124,35 @@ export function createScaleRow(labelTitle, container) {
   };
 
   /* =========================
-     Value helpers
+     VALUE HELPERS
   ========================= */
 
   const getValue = () => {
     const num = Number(input.value);
-    return Number.isFinite(num) && num > 0 ? Math.min(num, 100) : null;
+    return Number.isFinite(num) && num > 0 ? Math.min(num, 100) : 0;
   };
 
   const setValue = (val) => {
-    input.value = val === 0 ? "" : val;
+    const next = Math.min(100, Math.max(0, val));
+    input.value = next === 0 ? "" : next;
     input.dispatchEvent(new Event("input", { bubbles: true }));
   };
 
   const syncVisuals = () => {
     const val = getValue();
-    fill.style.width = `${val ?? 0}%`;
-    percentLabel.textContent = val ?? 0;
+    fill.style.width = `${val}%`;
+    percentLabel.textContent = val;
 
     Object.entries(markers).forEach(([type, marker]) => {
       if (marker.classList.contains("active")) {
         marker.style.left =
-          type === "check" ? `calc(${val ?? 0}% + 8px)` : `${val ?? 0}%`;
+          type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
       }
     });
   };
 
   /* =========================
-     Input
+     INPUT (keyboard + wheel)
   ========================= */
 
   input.addEventListener("focus", () => input.select());
@@ -168,8 +170,19 @@ export function createScaleRow(labelTitle, container) {
     }
   });
 
+  // wheel — для КАЖДОЙ шкалы
+  input.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? STEP_INPUT : -STEP_INPUT;
+      setValue(getValue() + delta);
+    },
+    { passive: false }
+  );
+
   /* =========================
-     Arrow controls (C2)
+     ARROWS (C2, mobile only via CSS)
   ========================= */
 
   const HOLD_DELAY = 300;
@@ -178,14 +191,13 @@ export function createScaleRow(labelTitle, container) {
   const ACCELERATION = 0.85;
 
   let holdTimeout = null;
-  let holdInterval = null;
+  let holdTimer = null;
   let currentInterval = START_INTERVAL;
 
   const vibrate = () => navigator.vibrate?.(10);
 
   const changeBy = (delta) => {
-    const current = Number(input.value) || 0;
-    setValue(Math.min(100, Math.max(0, current + delta)));
+    setValue(getValue() + delta);
   };
 
   const startHold = (delta) => {
@@ -201,7 +213,7 @@ export function createScaleRow(labelTitle, container) {
           currentInterval * ACCELERATION
         );
 
-        holdInterval = setTimeout(tick, currentInterval);
+        holdTimer = setTimeout(tick, currentInterval);
       };
 
       tick();
@@ -210,21 +222,21 @@ export function createScaleRow(labelTitle, container) {
 
   const stopHold = () => {
     clearTimeout(holdTimeout);
-    clearTimeout(holdInterval);
+    clearTimeout(holdTimer);
     holdTimeout = null;
-    holdInterval = null;
+    holdTimer = null;
   };
 
   arrowLeft.addEventListener("pointerdown", () => {
-    changeBy(-STEP);
+    changeBy(-STEP_INPUT);
     vibrate();
-    startHold(-STEP);
+    startHold(-STEP_INPUT);
   });
 
   arrowRight.addEventListener("pointerdown", () => {
-    changeBy(STEP);
+    changeBy(STEP_INPUT);
     vibrate();
-    startHold(STEP);
+    startHold(STEP_INPUT);
   });
 
   ["pointerup", "pointerleave", "pointercancel"].forEach((evt) => {
@@ -233,7 +245,7 @@ export function createScaleRow(labelTitle, container) {
   });
 
   /* =========================
-     Marker toggle
+     MARKER TOGGLE
   ========================= */
 
   const toggleMarker = (type) => {
@@ -253,8 +265,8 @@ export function createScaleRow(labelTitle, container) {
     marker.classList.add("active");
     marker.style.left =
       type === "check"
-        ? `calc(${getValue() ?? 0}% + 8px)`
-        : `${getValue() ?? 0}%`;
+        ? `calc(${getValue()}% + 8px)`
+        : `${getValue()}%`;
 
     button.style.backgroundColor = "#ffe6e6";
     button.style.borderColor = "#ff0000";
@@ -266,7 +278,7 @@ export function createScaleRow(labelTitle, container) {
   buttons.check.addEventListener("click", () => toggleMarker("check"));
 
   /* =========================
-     Clear
+     CLEAR
   ========================= */
 
   row.querySelector(".clear-btn").addEventListener("click", () => {
