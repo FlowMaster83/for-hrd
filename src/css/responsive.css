@@ -1,3 +1,7 @@
+/* =========================================================
+   ≤ 1024px — compact layout, actions under scale
+========================================================= */
+
 @media (max-width: 1024px) {
   .scale-row {
     grid-template-columns: 240px 1fr;
@@ -7,10 +11,15 @@
     row-gap: 20px;
   }
 
+  .scale-row .value {
+    gap: 12px;
+  }
+
   .scale-row .actions {
-    justify-self: start;
     width: 100%;
     padding-right: 8px;
+    display: flex;
+    gap: 8px;
   }
 
   .scale-row .actions button {
@@ -21,17 +30,21 @@
   .scale-row .actions .clear-btn {
     flex: 2;
   }
-
-  .scale-row .value {
-    gap: 12px;
-  }
 }
+
+/* =========================================================
+   ≤ 768px — hide modal trigger
+========================================================= */
 
 @media (max-width: 768px) {
   [data-open-modal] {
     display: none !important;
   }
 }
+
+/* =========================================================
+   ≤ 640px — stacked layout, simplified scale
+========================================================= */
 
 @media (max-width: 640px) {
   .scale-row {
@@ -41,10 +54,6 @@
       "value"
       "actions";
     row-gap: 12px;
-
-    .scale-row .value {
-      padding-right: 8px;
-    }
   }
 
   .scale-row .label {
@@ -52,32 +61,44 @@
     width: auto;
   }
 
+  .scale-row .value {
+    gap: 10px;
+    padding-right: 8px;
+    padding-bottom: 16px; /* отступ от меток */
+  }
+
+  /* ---- SCALE SIMPLIFICATION ---- */
+
+  /* скрываем все цифры */
   .tick {
     display: none;
   }
 
-  .tick:nth-child(1),
-  .tick:nth-child(6),
-  .tick:nth-child(11) {
+  /* показываем только 0 / 50 / 100 */
+  .tick.tick--major {
     display: block;
   }
 
-  .chart-track::before {
-    background-image: none;
-    left: 50%;
-    width: var(--tick-width);
-    background-color: var(--tick-color);
-    transform: translateX(-50%);
+  /* убираем вертикальные линии */
+  .tick-line {
+    display: none;
   }
 
-  .scale-row .value {
-    gap: 10px;
+  /* гарантированно убираем before */
+  .chart-track::before {
+    display: none;
   }
+
+  /* ---- HEADER ---- */
 
   .header-options p {
     display: none;
   }
 }
+
+/* =========================================================
+   ≤ 512px — smaller header
+========================================================= */
 
 @media (max-width: 512px) {
   :root {
@@ -89,49 +110,53 @@
   }
 }
 
-@media (max-width: 400px) {
+/* =========================================================
+   ≤ 480px — mobile actions (letters, check, arrows)
+========================================================= */
+
+@media (max-width: 480px) {
   .scale-row .actions {
-    gap: 4px;
+    gap: 6px;
   }
 
-  /* маленькие кнопки маркеров */
-  .scale-row .actions button:not(.clear-btn) {
-    width: 36px;
-    height: 36px;
+  /* все кнопки */
+  .scale-row .actions button {
+    height: 30px;
+    min-width: 36px;
     padding: 0;
 
-    font-size: 12px;
-    line-height: 1;
-
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
   }
 
-  /* CLEAR остаётся текстовой */
+  /* маркерные кнопки: C / D / S / ✓ */
+  .scale-row .actions
+  button:not(.clear-btn):not(.arrow-btn) {
+    font-size: 0; /* скрываем текст */
+  }
+
+  .scale-row .actions
+  button:not(.clear-btn):not(.arrow-btn)::after {
+    content: attr(data-short);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  /* стрелки */
+  .scale-row .actions .arrow-btn {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* CLEAR — тянется, текстовый */
   .scale-row .actions .clear-btn {
-    height: 36px;
-    padding: 0 10px;
+    flex: 1;
+    min-width: 56px;
+    padding: 0 8px;
     font-size: 12px;
+    font-weight: 600;
     white-space: nowrap;
-  }
-}
-
-@media (max-width: 480px) {
-  /* скрываем ВСЕ цифры */
-  .tick {
-    display: none;
-  }
-
-  /* показываем только 0 / 50 / 100 */
-  .tick:nth-child(1),
-  .tick:nth-child(6),
-  .tick:nth-child(11) {
-    display: block;
-  }
-
-  /* убираем вертикальные линии */
-  .tick-line {
-    display: none;
   }
 }
