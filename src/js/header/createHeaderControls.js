@@ -1,4 +1,5 @@
 // header/createHeaderControls.js
+import { createThemeToggleButton } from "../theme/themeButton.js";
 
 const MAX = 100;
 const STEP = 1;
@@ -7,7 +8,7 @@ const STEP = 1;
  * Нормализация значения
  * null → пусто (placeholder)
  * 0    → допустимо для шкал
- * 1-100
+ * 1–100
  */
 function normalizeValue(raw) {
   if (raw === "") return null;
@@ -77,25 +78,34 @@ export function createHeaderControls(rootId) {
      BUTTONS
   ----------------------------- */
 
-  const clearBtn = document.createElement("button");
-  clearBtn.className = "clear-all-btn";
-  clearBtn.type = "button";
-  clearBtn.textContent = "CLEAR ALL";
-
   const resultBtn = document.createElement("button");
   resultBtn.className = "header-result-btn";
   resultBtn.type = "button";
   resultBtn.textContent = "RESULT";
   resultBtn.dataset.openModal = "true";
 
+  const clearBtn = document.createElement("button");
+  clearBtn.className = "clear-all-btn";
+  clearBtn.type = "button";
+  clearBtn.textContent = "CLEAR ALL";
+
   /* -----------------------------
      LANGUAGE TOGGLE
   ----------------------------- */
 
   const langBtn = document.createElement("button");
-  langBtn.className = "lang-toggle-btn";
+  langBtn.className = "lang-toggle-btn button";
   langBtn.type = "button";
   langBtn.textContent = "UA";
+
+  /* -----------------------------
+     THEME TOGGLE (after language)
+  ----------------------------- */
+
+  const themeContainer = document.createElement("div");
+  themeContainer.className = "theme-toggle";
+
+  createThemeToggleButton(themeContainer);
 
   /* -----------------------------
      INPUT: keyboard + arrows
@@ -104,13 +114,7 @@ export function createHeaderControls(rootId) {
   input.addEventListener("input", () => {
     const value = normalizeValue(input.value);
 
-    if (value === null) {
-      input.value = "";
-      applyValueToAllScales(0);
-      return;
-    }
-
-    if (value === 0) {
+    if (value === null || value === 0) {
       input.value = "";
       applyValueToAllScales(0);
       return;
@@ -158,7 +162,15 @@ export function createHeaderControls(rootId) {
      APPEND
   ----------------------------- */
 
-  wrapper.append(label, input, resultBtn, clearBtn, langBtn);
+  wrapper.append(
+    label,
+    input,
+    resultBtn,
+    clearBtn,
+    langBtn,
+    themeContainer
+  );
+
   root.appendChild(wrapper);
 
   return {

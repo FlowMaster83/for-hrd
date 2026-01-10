@@ -34,9 +34,9 @@ export function createScaleRow(labelTitle, container) {
     </div>
 
     <div class="actions">
-      <button class="star-btn" type="button">STAR</button>
       <button class="circle-btn" type="button">CIRCLE</button>
-      <button class="dotted-btn" type="button">DASHED</button>
+      <button class="dotted-btn" type="button">DASH</button>
+      <button class="star-btn" type="button">STAR</button>
       <button class="check-btn" type="button">CHECK</button>
       <button class="clear-btn" type="button">CLEAR</button>
     </div>

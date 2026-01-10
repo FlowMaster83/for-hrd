@@ -44,27 +44,34 @@ function renderModalScaleHeader() {
 
   header.innerHTML = `
     <div class="scale-head-grid">
-      <div class="scale-head-spacer"></div>
+      <!-- ROW 1 -->
+      <div></div>
+      <div class="scale-head-levels">
+        <span class="level low">LOW</span>
+        <span class="level average">AVERAGE</span>
+        <span class="level high">HIGH</span>
+      </div>
 
-      <div class="scale-head-content">
-        <div class="scale-head-levels">
-          <span class="level low">LOW</span>
-          <span class="level average">AVERAGE</span>
-          <span class="level high">HIGH</span>
-        </div>
+      <!-- ROW 2 (LOGO BETWEEN LINES) -->
+      <div class="main-logo">
+        HireBox&trade;
+      </div>
+      <div></div>
 
-        <div class="scale-head-values">
-          <span class="value v0">0%</span>
-          <span class="value v33">33%</span>
-          <span class="value v66">66%</span>
-          <span class="value v100">100%</span>
-        </div>
+      <!-- ROW 3 -->
+      <div></div>
+      <div class="scale-head-values">
+        <span class="value v0">0%</span>
+        <span class="value v33">33%</span>
+        <span class="value v66">66%</span>
+        <span class="value v100">100%</span>
       </div>
     </div>
   `;
 
   return header;
 }
+
 
 /* =========================================================
    RESULT ROW (READ-ONLY)

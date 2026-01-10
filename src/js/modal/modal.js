@@ -2,12 +2,23 @@ import { renderModalResults } from "./modalContent.js";
 
 const MODAL_BREAKPOINT = 768;
 
+/* =========================================================
+   UTILS
+========================================================= */
+
 function isModalAllowed() {
-  return window.innerWidth > MODAL_BREAKPOINT;
+  return window.innerWidth >= MODAL_BREAKPOINT;
 }
 
+/* =========================================================
+   STATE
+========================================================= */
+
 let modalRoot = null;
-let lastActiveElement = null;
+
+/* =========================================================
+   MODAL CREATION
+========================================================= */
 
 function createModal() {
   if (modalRoot) return modalRoot;
@@ -20,19 +31,6 @@ function createModal() {
     <div class="modal__overlay" data-close-modal></div>
 
     <div class="modal__content" role="dialog" aria-modal="true">
-      <header class="modal__header">
-        <div class="modal__logo">HireBox™</div>
-
-        <button
-          class="modal__close"
-          type="button"
-          data-close-modal
-          aria-label="Close results"
-        >
-          ×
-        </button>
-      </header>
-
       <section class="modal__body"></section>
     </div>
   `;
@@ -43,8 +41,13 @@ function createModal() {
   return modalRoot;
 }
 
-export function openModal(contentNode, triggerEl = null) {
-  lastActiveElement = triggerEl;
+/* =========================================================
+   OPEN / CLOSE
+========================================================= */
+
+export function openModal(contentNode) {
+  if (!isModalAllowed()) return;
+  if (!contentNode) return;
 
   const modal = createModal();
   const body = modal.querySelector(".modal__body");
@@ -54,56 +57,50 @@ export function openModal(contentNode, triggerEl = null) {
 
   modal.classList.add("is-open");
   modal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
 
-  modal.querySelector(".modal__close").focus();
+  // optional: блокируем скролл страницы
+  document.body.style.overflow = "hidden";
 }
 
 export function closeModal() {
   if (!modalRoot) return;
 
-  // 1️⃣ УБИРАЕМ ФОКУС С МОДАЛКИ
-  const activeEl = document.activeElement;
-  if (modalRoot.contains(activeEl)) {
-    activeEl.blur();
-  }
-
-  // 2️⃣ ПРЯЧЕМ МОДАЛКУ
   modalRoot.classList.remove("is-open");
   modalRoot.setAttribute("aria-hidden", "true");
+
   document.body.style.overflow = "";
-
-  // 3️⃣ ВОЗВРАЩАЕМ ФОКУС НА ТРИГГЕР
-  if (lastActiveElement instanceof HTMLElement) {
-    lastActiveElement.focus();
-  }
-
-  lastActiveElement = null;
 }
 
-/* =========================================
+/* =========================================================
    GLOBAL EVENTS
-========================================= */
+========================================================= */
 
 document.addEventListener("click", (e) => {
   const openBtn = e.target.closest("[data-open-modal]");
 
   if (openBtn) {
-    // ❌ на мобильных модалка полностью отключена
+    // ⛔ mobile: модалки не существует
     if (!isModalAllowed()) return;
 
     const resultsNode = renderModalResults();
-    openModal(resultsNode, openBtn);
+    if (!resultsNode) return;
+
+    openModal(resultsNode);
     return;
   }
 
+  // закрытие ТОЛЬКО по клику на backdrop
   if (e.target.closest("[data-close-modal]")) {
     closeModal();
   }
 });
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
+/* =========================================================
+   SAFETY: RESIZE
+========================================================= */
+
+window.addEventListener("resize", () => {
+  if (!isModalAllowed()) {
     closeModal();
   }
 });

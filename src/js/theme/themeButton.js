@@ -1,6 +1,15 @@
 import { toggleTheme, getTheme } from "./dark.js";
 
-export function createThemeToggleButton(container = document.body) {
+/**
+ * Создаёт кнопку переключения темы
+ * ⚠️ Контейнер ОБЯЗАТЕЛЕН
+ */
+export function createThemeToggleButton(container) {
+  if (!container) return;
+
+  // защита от дублирования
+  if (container.querySelector("[data-toggle-theme]")) return;
+
   const button = document.createElement("button");
 
   button.type = "button";

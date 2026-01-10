@@ -38,8 +38,7 @@ button:hover {
   cursor: pointer;
 
   width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  height: 32px;
 
   display: flex;
   align-items: center;
