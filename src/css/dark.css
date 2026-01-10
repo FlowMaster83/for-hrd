@@ -21,7 +21,8 @@
   --tick-bg-color: rgba(255, 255, 255, 0.18);
 
   --button-background-color: #171a21;
-  --button-border-color: #2a2e38;
+  --button-border-color: #e6e6e6;
+  --button-text-color: #e6e6e6;
   --button-hover-color: #ffffff;
   --button-hover-background-color: #242833;
 
