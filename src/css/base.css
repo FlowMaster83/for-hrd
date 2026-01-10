@@ -58,3 +58,7 @@ body {
   background: var(--bg-color);
   color: var(--body-color);
 }
+
+html, body {
+  overflow-x: hidden;
+}

@@ -1,10 +1,19 @@
+/* scales.css */
+
+#scales-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .scale-row {
   display: grid;
-  grid-template-columns: 200px 1fr auto;
-  grid-template-areas: "label value actions";
+  grid-template-columns: 200px 1fr max-content 12px;
+  grid-template-areas: "label value actions .";
   column-gap: 12px;
   align-items: center;
   margin-bottom: 20px;
+  min-width: 0;
 }
 
 .scale-row .label {
@@ -23,6 +32,15 @@
   display: flex;
   align-items: center;
   gap: 36px;
+  min-width: 0;
+  padding-right: 8px;
+}
+
+.scale-row .actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -93,17 +111,4 @@
   font-weight: 700;
   border: 1px solid var(--user-input-bg-color);
   border-radius: 4px;
-}
-
-.scale-row .actions {
-  grid-area: actions;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-#scales-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }

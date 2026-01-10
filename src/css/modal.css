@@ -149,13 +149,3 @@
 .result-scale .chart-track {
   position: relative;
 }
-
-/* =========================================================
-   MOBILE — FEATURE OFF
-========================================================= */
-
-@media (max-width: 768px) {
-  [data-open-modal] {
-    display: none !important;
-  }
-}
