@@ -7,7 +7,7 @@ const STEP = 1;
  * Нормализация значения
  * null → пусто (placeholder)
  * 0    → допустимо для шкал
- * 1–100
+ * 1-100
  */
 function normalizeValue(raw) {
   if (raw === "") return null;
@@ -158,7 +158,7 @@ export function createHeaderControls(rootId) {
      APPEND
   ----------------------------- */
 
-  wrapper.append(label, input, clearBtn, resultBtn, langBtn);
+  wrapper.append(label, input, resultBtn, clearBtn, langBtn);
   root.appendChild(wrapper);
 
   return {
