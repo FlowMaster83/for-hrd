@@ -1,30 +1,40 @@
 // header/createHeaderControls.js
 
-const MIN = 1;
 const MAX = 100;
 const STEP = 1;
 
+/**
+ * Нормализация значения
+ * null → пусто (placeholder)
+ * 0    → допустимо для шкал
+ * 1–100
+ */
 function normalizeValue(raw) {
   if (raw === "") return null;
 
-  let value = Number(raw);
-
+  const value = Number(raw);
   if (Number.isNaN(value)) return null;
-  if (value < MIN) return null;
 
+  if (value <= 0) return 0;
   return Math.min(value, MAX);
 }
 
+/**
+ * Применяет значение ко всем шкалам
+ */
 function applyValueToAllScales(value) {
   document.querySelectorAll(".scale-row").forEach((row) => {
     const input = row.querySelector(".user-input");
     if (!input) return;
 
-    input.value = value;
+    input.value = value === 0 ? "" : value;
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
 }
 
+/**
+ * Полная очистка всех шкал
+ */
 function clearAllScales() {
   document.querySelectorAll(".scale-row").forEach((row) => {
     const input = row.querySelector(".user-input");
@@ -67,12 +77,6 @@ export function createHeaderControls(rootId) {
      BUTTONS
   ----------------------------- */
 
-  const fillBtn = document.createElement("button");
-  fillBtn.className = "fill-btn";
-  fillBtn.type = "button";
-  fillBtn.disabled = true;
-  fillBtn.textContent = "FILL ALL";
-
   const clearBtn = document.createElement("button");
   clearBtn.className = "clear-all-btn";
   clearBtn.type = "button";
@@ -94,25 +98,31 @@ export function createHeaderControls(rootId) {
   langBtn.textContent = "UA";
 
   /* -----------------------------
-     INPUT LOGIC
+     INPUT: keyboard + arrows
   ----------------------------- */
-
-  function updateFillState(value) {
-    fillBtn.disabled = value === null;
-  }
 
   input.addEventListener("input", () => {
     const value = normalizeValue(input.value);
 
     if (value === null) {
       input.value = "";
-      updateFillState(null);
+      applyValueToAllScales(0);
+      return;
+    }
+
+    if (value === 0) {
+      input.value = "";
+      applyValueToAllScales(0);
       return;
     }
 
     input.value = value;
-    updateFillState(value);
+    applyValueToAllScales(value);
   });
+
+  /* -----------------------------
+     INPUT: wheel
+  ----------------------------- */
 
   input.addEventListener(
     "wheel",
@@ -123,53 +133,36 @@ export function createHeaderControls(rootId) {
       const delta = e.deltaY < 0 ? STEP : -STEP;
       const next = normalizeValue(current + delta);
 
-      if (next === null) {
+      if (next === 0) {
         input.value = "";
-        updateFillState(null);
+        applyValueToAllScales(0);
         return;
       }
 
       input.value = next;
-      updateFillState(next);
-
       applyValueToAllScales(next);
     },
     { passive: false }
   );
 
   /* -----------------------------
-     FILL BUTTON
-  ----------------------------- */
-
-  fillBtn.addEventListener("click", () => {
-    const value = normalizeValue(input.value);
-    if (value === null) return;
-
-    applyValueToAllScales(value);
-  });
-
-  /* -----------------------------
-     CLEAR ALL BUTTON
+     CLEAR ALL
   ----------------------------- */
 
   clearBtn.addEventListener("click", () => {
     clearAllScales();
-
     input.value = "";
-    updateFillState(null);
   });
 
   /* -----------------------------
      APPEND
   ----------------------------- */
 
-  wrapper.append(label, input, fillBtn, clearBtn, resultBtn, langBtn);
-
+  wrapper.append(label, input, clearBtn, resultBtn, langBtn);
   root.appendChild(wrapper);
 
   return {
     input,
-    fillBtn,
     clearBtn,
     resultBtn,
     langBtn,
