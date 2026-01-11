@@ -1,4 +1,4 @@
-// ініціалізація всіх шкал
+// initScales.js
 
 import { LABELS } from "../constants/labels.js";
 import { createScaleRow } from "./createScaleRow.js";

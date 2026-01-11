@@ -1,3 +1,4 @@
+// dark.js
 const THEME_KEY = "theme";
 const DARK = "dark";
 const LIGHT = "light";

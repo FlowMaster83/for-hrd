@@ -1,3 +1,4 @@
+// createScaleRow.js
 import { createMarker } from "../components/markers.js";
 import { registerScale } from "../state/scaleRegistry.js";
 
@@ -10,39 +11,67 @@ export function createScaleRow(labelTitle, container) {
   row.className = "scale-row";
 
   row.innerHTML = `
-    <div class="label">
-      <span class="scale-label">${labelTitle}</span>:
-      <span class="percent-value">0</span>
-    </div>
+  <div class="label">
+    <span class="scale-label">${labelTitle}</span>:
+    <span class="percent-value">0</span>
+  </div>
 
-    <div class="value">
-      <div class="chart-wrapper">
-        <div class="chart-track">
-          <div class="chart-fill"></div>
-          <div class="ticks"></div>
-        </div>
+  <div class="value">
+    <div class="chart-wrapper">
+      <div class="chart-track">
+        <div class="chart-fill"></div>
+        <div class="ticks"></div>
       </div>
-
-      <input
-        class="user-input"
-        type="number"
-        placeholder="0"
-        min="0"
-        max="100"
-      />
     </div>
 
-    <div class="actions">
-      <button class="circle-btn" type="button">CIRCLE</button>
-      <button class="dotted-btn" type="button">DASH</button>
-      <button class="star-btn" type="button">STAR</button>
-      <button class="check-btn" type="button">CHECK</button>
-      <button class="clear-btn" type="button">CLEAR</button>
+    <input
+      class="user-input"
+      type="number"
+      placeholder="0"
+      min="0"
+      max="100"
+    />
+  </div>
 
-      <button class="arrow-btn arrow-left" type="button">←</button>
-      <button class="arrow-btn arrow-right" type="button">→</button>
-    </div>
-  `;
+  <div class="actions">
+    <button
+      class="circle-btn"
+      type="button"
+      data-marker="circle"
+      data-label="CIRCLE"
+      data-short="C"
+    >CIRCLE</button>
+
+    <button
+      class="dotted-btn"
+      type="button"
+      data-marker="dash"
+      data-label="DASH"
+      data-short="D"
+    >DASH</button>
+
+    <button
+      class="star-btn"
+      type="button"
+      data-marker="star"
+      data-label="STAR"
+      data-short="S"
+    >STAR</button>
+
+    <button
+      class="check-btn"
+      type="button"
+      data-marker="check"
+      data-label="CHECK"
+      data-short="✓"
+    >CHECK</button>
+
+    <button class="clear-btn" type="button">CLEAR</button>
+
+    <button class="arrow-btn arrow-left" type="button">←</button>
+    <button class="arrow-btn arrow-right" type="button">→</button>
+  </div>
+`;
 
   /* =========================
      DOM
@@ -142,9 +171,7 @@ export function createScaleRow(labelTitle, container) {
     Object.entries(markers).forEach(([type, marker]) => {
       if (marker.classList.contains("active")) {
         marker.style.left =
-          type === "check"
-            ? `calc(${val}% + 8px)`
-            : `${val}%`;
+          type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
       }
     });
   };
@@ -203,9 +230,7 @@ export function createScaleRow(labelTitle, container) {
     button.classList.add("marker-active");
 
     marker.style.left =
-      type === "check"
-        ? `calc(${getValue()}% + 8px)`
-        : `${getValue()}%`;
+      type === "check" ? `calc(${getValue()}% + 8px)` : `${getValue()}%`;
   };
 
   Object.entries(buttons).forEach(([type, btn]) => {

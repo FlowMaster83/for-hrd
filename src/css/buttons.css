@@ -1,3 +1,6 @@
+/* buttons.css */
+
+/* ===== БАЗОВОЕ СОСТОЯНИЕ ===== */
 button {
   height: 32px;
   padding: 0 12px;
@@ -18,10 +21,67 @@ button {
     border-color 0.2s ease;
 }
 
-button:hover {
-  background-color: var(--button-hover-background-color);
-  color: var(--button-hover-color);
+/* ===== HOVER ТОЛЬКО ДЛЯ ДЕСКТОПА ===== */
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-hover-color);
+  }
 }
+
+/* ===== ACTIVE НЕ МЕНЯЕТ ВНЕШНИЙ ВИД ===== */
+button:active {
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+  border-color: var(--button-border-color);
+}
+
+/* ===== АКТИВНЫЙ МАРКЕР (из ПРОБЛЕМЫ 1) ===== */
+button.marker-active {
+  background-color: #ffe6e6;
+  border-color: #ff0000;
+  color: #1a1a1a;
+}
+
+button.marker-active:active {
+  background-color: #ffe6e6;
+  border-color: #ff0000;
+  color: #1a1a1a;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button.marker-active:hover {
+    background-color: #ffe6e6;
+    border-color: #ff0000;
+    color: #1a1a1a;
+  }
+}
+
+/* ===== МАРКЕРЫ (КРИТИЧНО ДЛЯ ≤480) ===== */
+button[data-marker] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+  letter-spacing: 0;
+
+  overflow: visible;
+  text-indent: 0;
+  opacity: 1;
+}
+
+/* ===== FIX ДЛЯ МОБИЛКИ ===== */
+@media (max-width: 480px) {
+  button[data-marker] {
+    font-size: 14px;        /* текст снова виден */
+    line-height: 1;         /* без сдвига */
+    min-width: 32px;        /* не схлопывается */
+    padding: 0 6px;         /* компактно, но читаемо */
+  }
+}
+
+/* ===== СПЕЦИАЛЬНЫЕ КНОПКИ ===== */
 
 .clear-btn {
   color: var(--button-color);
@@ -37,6 +97,8 @@ button:hover {
   color: var(--button-result-text-color);
 }
 
+/* ===== КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ===== */
+
 [data-toggle-theme] {
   background-color: var(--button-background-color);
   color: var(--button-text-color);
@@ -51,8 +113,14 @@ button:hover {
   justify-content: center;
 }
 
-[data-toggle-theme]:hover {
-  background-color: var(--button-hover-background-color);
-  color: var(--button-hover-color);
+@media (hover: hover) and (pointer: fine) {
+  [data-toggle-theme]:hover {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-hover-color);
+  }
 }
 
+[data-toggle-theme]:active {
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+}

@@ -1,3 +1,4 @@
+// markers.js
 export const MARKER_SVGS = {
   star: `
     <svg

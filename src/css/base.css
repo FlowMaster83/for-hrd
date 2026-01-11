@@ -42,14 +42,6 @@
   --modal-bg-color: #fff;
 
   --modal-head-overlap: -8px;
-
-  /* например: components/buttons.css или base.css */
-.marker-active {
-  background-color: var(--marker-active-bg);
-  border-color: var(--marker-active-border);
-  color: var(--marker-active-text);
-}
-
 }
 
 *,

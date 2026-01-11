@@ -1,4 +1,4 @@
-// header/createHeaderControls.js
+// createHeaderControls.js
 
 import { createThemeToggleButton } from "../theme/themeButton.js";
 import { resetAllScales } from "../state/scaleRegistry.js";

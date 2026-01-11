@@ -1,4 +1,4 @@
-// constants/labels.js
+// labels.js
 export const LABELS = {
   ua: [
     "1. Передбачуваність",

@@ -1,4 +1,4 @@
-// header/controls.js
+// controls.js
 import { createHeaderControls } from "./createHeaderControls.js";
 import { LABELS } from "../constants/labels.js";
 
