@@ -202,10 +202,63 @@ export function createScaleRow(labelTitle, container) {
      ARROWS
   ========================= */
 
-  const changeBy = (delta) => setValue(getValue() + delta);
+  /* =========================
+   ARROWS (SAFE LONG PRESS)
+========================= */
 
-  arrowLeft.addEventListener("click", () => changeBy(-STEP_INPUT));
-  arrowRight.addEventListener("click", () => changeBy(STEP_INPUT));
+const vibrateOnce = () => {
+  if (navigator.vibrate) navigator.vibrate(10);
+};
+
+const changeBy = (delta) => {
+  setValue(getValue() + delta);
+};
+
+const setupArrow = (button, delta) => {
+  let holding = false;
+  let rafId = null;
+  let lastTime = 0;
+  let interval = 200;
+
+  const stop = () => {
+    holding = false;
+    interval = 200;
+    lastTime = 0;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  };
+
+  const step = (time) => {
+    if (!holding) return;
+
+    if (!lastTime) lastTime = time;
+
+    if (time - lastTime >= interval) {
+      changeBy(delta);
+      lastTime = time;
+      interval = Math.max(40, interval * 0.85);
+    }
+
+    rafId = requestAnimationFrame(step);
+  };
+
+  button.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    holding = true;
+
+    changeBy(delta);      // первый шаг
+    vibrateOnce();        // вибрация ТОЛЬКО здесь
+
+    rafId = requestAnimationFrame(step);
+  });
+
+  ["pointerup", "pointerleave", "pointercancel"].forEach((evt) =>
+    button.addEventListener(evt, stop)
+  );
+};
+
+setupArrow(arrowLeft, -STEP_INPUT);
+setupArrow(arrowRight, STEP_INPUT);
 
   /* =========================
      MARKER TOGGLE
