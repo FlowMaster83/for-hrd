@@ -198,17 +198,14 @@ export function createScaleRow(labelTitle, container) {
     { passive: false }
   );
 
-  /* =========================
-     ARROWS
-  ========================= */
-
-  /* =========================
-   ARROWS (SAFE LONG PRESS)
+/* =========================
+   ARROWS (SAFE LONG PRESS + VIBRATION)
 ========================= */
 
-const vibrateOnce = () => {
-  if (navigator.vibrate) navigator.vibrate(10);
-};
+const VIBRATION_STEP = 10;
+const VIBRATION_INTERVAL = 80; // ms — безопасный минимум
+
+const canVibrate = () => typeof navigator !== "undefined" && navigator.vibrate;
 
 const changeBy = (delta) => {
   setValue(getValue() + delta);
@@ -220,10 +217,23 @@ const setupArrow = (button, delta) => {
   let lastTime = 0;
   let interval = 200;
 
+  let lastVibrationTime = 0;
+
+  const vibrateStep = (time) => {
+    if (!canVibrate()) return;
+
+    if (time - lastVibrationTime >= VIBRATION_INTERVAL) {
+      navigator.vibrate(VIBRATION_STEP);
+      lastVibrationTime = time;
+    }
+  };
+
   const stop = () => {
     holding = false;
     interval = 200;
     lastTime = 0;
+    lastVibrationTime = 0;
+
     if (rafId) cancelAnimationFrame(rafId);
     rafId = null;
   };
@@ -235,6 +245,8 @@ const setupArrow = (button, delta) => {
 
     if (time - lastTime >= interval) {
       changeBy(delta);
+      vibrateStep(time);
+
       lastTime = time;
       interval = Math.max(40, interval * 0.85);
     }
@@ -246,8 +258,9 @@ const setupArrow = (button, delta) => {
     e.preventDefault();
     holding = true;
 
-    changeBy(delta);      // первый шаг
-    vibrateOnce();        // вибрация ТОЛЬКО здесь
+    // одиночный шаг — ВСЕГДА с вибрацией
+    changeBy(delta);
+    if (canVibrate()) navigator.vibrate(VIBRATION_STEP);
 
     rafId = requestAnimationFrame(step);
   });
@@ -259,6 +272,7 @@ const setupArrow = (button, delta) => {
 
 setupArrow(arrowLeft, -STEP_INPUT);
 setupArrow(arrowRight, STEP_INPUT);
+
 
   /* =========================
      MARKER TOGGLE
