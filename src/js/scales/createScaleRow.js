@@ -1,9 +1,8 @@
-// createScaleRow.js
-
 import { createMarker } from "../components/markers.js";
+import { registerScale } from "../state/scaleRegistry.js";
 
-const STEP_INPUT = 1;   // логика (инпут, стрелки)
-const STEP_TICK = 10;   // визуальные метки
+const STEP_INPUT = 1;
+const STEP_TICK = 10;
 const MAX = 100;
 
 export function createScaleRow(labelTitle, container) {
@@ -34,15 +33,14 @@ export function createScaleRow(labelTitle, container) {
     </div>
 
     <div class="actions">
-      <button class="circle-btn" data-short="C" type="button">CIRCLE</button>
-      <button class="dotted-btn" data-short="D" type="button">DASH</button>
-      <button class="star-btn" data-short="S" type="button">STAR</button>
-      <button class="check-btn" data-short="✓" type="button">CHECK</button>
+      <button class="circle-btn" type="button">CIRCLE</button>
+      <button class="dotted-btn" type="button">DASH</button>
+      <button class="star-btn" type="button">STAR</button>
+      <button class="check-btn" type="button">CHECK</button>
       <button class="clear-btn" type="button">CLEAR</button>
 
-      <!-- arrows (visible only ≤480 via CSS) -->
-      <button class="arrow-btn arrow-left" type="button" aria-label="Decrease">←</button>
-      <button class="arrow-btn arrow-right" type="button" aria-label="Increase">→</button>
+      <button class="arrow-btn arrow-left" type="button">←</button>
+      <button class="arrow-btn arrow-right" type="button">→</button>
     </div>
   `;
 
@@ -60,7 +58,7 @@ export function createScaleRow(labelTitle, container) {
   const arrowRight = row.querySelector(".arrow-right");
 
   /* =========================
-     TICKS (VISUAL ONLY)
+     TICKS (visual only)
   ========================= */
 
   const lineNodes = [];
@@ -69,16 +67,15 @@ export function createScaleRow(labelTitle, container) {
     const tick = document.createElement("div");
     tick.className = "tick";
     tick.textContent = value;
+    tick.style.left = `${value}%`;
 
     if (value === 0 || value === 50 || value === 100) {
       tick.classList.add("tick--major");
     }
-
     if (value === 100) {
       tick.classList.add("tick--end");
     }
 
-    tick.style.left = `${value}%`;
     ticks.appendChild(tick);
 
     if (value > 0 && value < 100) {
@@ -94,7 +91,6 @@ export function createScaleRow(labelTitle, container) {
     if (!width) return;
 
     const stepPx = width / (MAX / STEP_TICK);
-
     lineNodes.forEach(({ value, el }) => {
       el.style.left = `${Math.round((value / STEP_TICK) * stepPx)}px`;
     });
@@ -129,13 +125,13 @@ export function createScaleRow(labelTitle, container) {
 
   const getValue = () => {
     const num = Number(input.value);
-    return Number.isFinite(num) && num > 0 ? Math.min(num, 100) : 0;
+    return Number.isFinite(num) && num > 0 ? Math.min(num, MAX) : 0;
   };
 
   const setValue = (val) => {
-    const next = Math.min(100, Math.max(0, val));
+    const next = Math.min(MAX, Math.max(0, val));
     input.value = next === 0 ? "" : next;
-    input.dispatchEvent(new Event("input", { bubbles: true }));
+    syncVisuals();
   };
 
   const syncVisuals = () => {
@@ -146,7 +142,9 @@ export function createScaleRow(labelTitle, container) {
     Object.entries(markers).forEach(([type, marker]) => {
       if (marker.classList.contains("active")) {
         marker.style.left =
-          type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
+          type === "check"
+            ? `calc(${val}% + 8px)`
+            : `${val}%`;
       }
     });
   };
@@ -159,18 +157,10 @@ export function createScaleRow(labelTitle, container) {
 
   input.addEventListener("input", () => {
     if (input.value < 0) input.value = "";
-    if (input.value > 100) input.value = 100;
+    if (input.value > MAX) input.value = MAX;
     syncVisuals();
   });
 
-  input.addEventListener("blur", () => {
-    if (input.value === "0") {
-      input.value = "";
-      syncVisuals();
-    }
-  });
-
-  // wheel — для КАЖДОЙ шкалы
   input.addEventListener(
     "wheel",
     (e) => {
@@ -182,67 +172,13 @@ export function createScaleRow(labelTitle, container) {
   );
 
   /* =========================
-     ARROWS (C2, mobile only via CSS)
+     ARROWS
   ========================= */
 
-  const HOLD_DELAY = 300;
-  const START_INTERVAL = 180;
-  const MIN_INTERVAL = 40;
-  const ACCELERATION = 0.85;
+  const changeBy = (delta) => setValue(getValue() + delta);
 
-  let holdTimeout = null;
-  let holdTimer = null;
-  let currentInterval = START_INTERVAL;
-
-  const vibrate = () => navigator.vibrate?.(10);
-
-  const changeBy = (delta) => {
-    setValue(getValue() + delta);
-  };
-
-  const startHold = (delta) => {
-    currentInterval = START_INTERVAL;
-
-    holdTimeout = setTimeout(() => {
-      const tick = () => {
-        changeBy(delta);
-        vibrate();
-
-        currentInterval = Math.max(
-          MIN_INTERVAL,
-          currentInterval * ACCELERATION
-        );
-
-        holdTimer = setTimeout(tick, currentInterval);
-      };
-
-      tick();
-    }, HOLD_DELAY);
-  };
-
-  const stopHold = () => {
-    clearTimeout(holdTimeout);
-    clearTimeout(holdTimer);
-    holdTimeout = null;
-    holdTimer = null;
-  };
-
-  arrowLeft.addEventListener("pointerdown", () => {
-    changeBy(-STEP_INPUT);
-    vibrate();
-    startHold(-STEP_INPUT);
-  });
-
-  arrowRight.addEventListener("pointerdown", () => {
-    changeBy(STEP_INPUT);
-    vibrate();
-    startHold(STEP_INPUT);
-  });
-
-  ["pointerup", "pointerleave", "pointercancel"].forEach((evt) => {
-    arrowLeft.addEventListener(evt, stopHold);
-    arrowRight.addEventListener(evt, stopHold);
-  });
+  arrowLeft.addEventListener("click", () => changeBy(-STEP_INPUT));
+  arrowRight.addEventListener("click", () => changeBy(STEP_INPUT));
 
   /* =========================
      MARKER TOGGLE
@@ -272,16 +208,15 @@ export function createScaleRow(labelTitle, container) {
     button.style.borderColor = "#ff0000";
   };
 
-  buttons.solid.addEventListener("click", () => toggleMarker("solid"));
-  buttons.dotted.addEventListener("click", () => toggleMarker("dotted"));
-  buttons.star.addEventListener("click", () => toggleMarker("star"));
-  buttons.check.addEventListener("click", () => toggleMarker("check"));
+  Object.entries(buttons).forEach(([type, btn]) => {
+    btn.addEventListener("click", () => toggleMarker(type));
+  });
 
   /* =========================
-     CLEAR
+     RESET (единая логика)
   ========================= */
 
-  row.querySelector(".clear-btn").addEventListener("click", () => {
+  const resetScale = () => {
     setValue(0);
 
     Object.values(markers).forEach((m) => {
@@ -293,7 +228,21 @@ export function createScaleRow(labelTitle, container) {
       b.style.backgroundColor = "";
       b.style.borderColor = "";
     });
-  });
+  };
+
+  row.querySelector(".clear-btn").addEventListener("click", resetScale);
 
   container.appendChild(row);
+
+  /* =========================
+     PUBLIC API + REGISTRY
+  ========================= */
+
+  const api = {
+    reset: resetScale,
+  };
+
+  registerScale(api);
+
+  return api;
 }

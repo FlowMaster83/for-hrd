@@ -1,5 +1,7 @@
 // header/createHeaderControls.js
+
 import { createThemeToggleButton } from "../theme/themeButton.js";
+import { resetAllScales } from "../state/scaleRegistry.js";
 
 const MAX = 100;
 const STEP = 1;
@@ -22,6 +24,7 @@ function normalizeValue(raw) {
 
 /**
  * Применяет значение ко всем шкалам
+ * (используется master-input)
  */
 function applyValueToAllScales(value) {
   document.querySelectorAll(".scale-row").forEach((row) => {
@@ -29,19 +32,6 @@ function applyValueToAllScales(value) {
     if (!input) return;
 
     input.value = value === 0 ? "" : value;
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-}
-
-/**
- * Полная очистка всех шкал
- */
-function clearAllScales() {
-  document.querySelectorAll(".scale-row").forEach((row) => {
-    const input = row.querySelector(".user-input");
-    if (!input) return;
-
-    input.value = "";
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
 }
@@ -99,16 +89,15 @@ export function createHeaderControls(rootId) {
   langBtn.textContent = "UA";
 
   /* -----------------------------
-     THEME TOGGLE (after language)
+     THEME TOGGLE
   ----------------------------- */
 
   const themeContainer = document.createElement("div");
   themeContainer.className = "theme-toggle";
-
   createThemeToggleButton(themeContainer);
 
   /* -----------------------------
-     INPUT: keyboard + arrows
+     INPUT: keyboard
   ----------------------------- */
 
   input.addEventListener("input", () => {
@@ -150,11 +139,14 @@ export function createHeaderControls(rootId) {
   );
 
   /* -----------------------------
-     CLEAR ALL
+     CLEAR ALL (КЛЮЧЕВАЯ ЧАСТЬ)
   ----------------------------- */
 
   clearBtn.addEventListener("click", () => {
-    clearAllScales();
+    // 1. Сбрасываем ВСЕ шкалы через registry
+    resetAllScales();
+
+    // 2. Очищаем master-input
     input.value = "";
   });
 
