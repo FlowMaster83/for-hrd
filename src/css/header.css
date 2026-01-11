@@ -1,4 +1,5 @@
 /* header.css */
+
 .header {
   position: fixed;
   top: 0;
@@ -14,30 +15,28 @@
   align-items: center;
 }
 
-.header .layout {
+/* 🔑 ОТДЕЛЬНЫЙ LAYOUT ДЛЯ ХЕДЕРА */
+.header-layout {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
   width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 0 var(--layout-padding);
 }
 
+/* логотип */
 .main-logo {
-  margin-right: auto;
   font-size: 22px;
   color: var(--logo-color);
   font-weight: 700;
-
   text-decoration: none;
   cursor: pointer;
 }
 
-.main-logo--report {
-  display: none;
-}
-
-.main-logo:hover {
-  opacity: 0.85;
-}
-
+/* контролы */
 .header-options {
   display: flex;
   align-items: center;

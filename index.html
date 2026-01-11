@@ -21,32 +21,40 @@
       referrerpolicy="no-referrer"
     />
 
-    <!-- Стилі -->
+    <!-- Styles -->
     <link rel="stylesheet" href="./src/css/modal.css" />
     <link rel="stylesheet" href="./src/css/main.css" />
+
     <title>Шкала показників HireBox</title>
   </head>
+
   <body>
-    <header class="header">
-        <!-- <a href="./test/test.html">TEST</a> -->
-      <div class="layout">
-        <a href="./" class="main-logo" aria-label="HOME"> HireBox&trade; </a>
-        <div id="header-controls-root"></div>
-      </div>
-    </header>
+    <!-- ======================
+         HEADER
+    ======================= -->
+<header class="header">
+  <div class="header-layout">
+    <a class="main-logo">HireBox™</a>
+    <div id="header-controls-root" class="header-options"></div>
+  </div>
+</header>
 
+
+    <!-- ======================
+         MAIN CONTENT
+    ======================= -->
     <main>
-      <section class="layout">
-        <div class="container" id="scaleRoot">
-          <div class="main-logo main-logo--report">HireBox&trade;</div>
-
-
-            <div id="scales-container"></div>
-
+      <section>
+        <div class="layout">
+          <!-- основной контент -->
+          <div id="scales-container"></div>
         </div>
       </section>
     </main>
 
+    <!-- ======================
+         SCRIPTS
+    ======================= -->
     <script src="./src/js/main.js" type="module"></script>
   </body>
 </html>

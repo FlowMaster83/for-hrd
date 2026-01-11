@@ -1,6 +1,7 @@
 // createScaleRow.js
 import { createMarker } from "../components/markers.js";
 import { registerScale } from "../state/scaleRegistry.js";
+import { useArrowHold } from "../arrows/useArrowHold.js";
 
 const STEP_INPUT = 1;
 const STEP_TICK = 10;
@@ -199,80 +200,22 @@ export function createScaleRow(labelTitle, container) {
   );
 
 /* =========================
-   ARROWS (SAFE LONG PRESS + VIBRATION)
+   ARROWS (delegated, stable)
 ========================= */
-
-const VIBRATION_STEP = 10;
-const VIBRATION_INTERVAL = 80; // ms — безопасный минимум
-
-const canVibrate = () => typeof navigator !== "undefined" && navigator.vibrate;
 
 const changeBy = (delta) => {
   setValue(getValue() + delta);
 };
 
-const setupArrow = (button, delta) => {
-  let holding = false;
-  let rafId = null;
-  let lastTime = 0;
-  let interval = 200;
+useArrowHold({
+  button: arrowLeft,
+  onStep: () => changeBy(-STEP_INPUT),
+});
 
-  let lastVibrationTime = 0;
-
-  const vibrateStep = (time) => {
-    if (!canVibrate()) return;
-
-    if (time - lastVibrationTime >= VIBRATION_INTERVAL) {
-      navigator.vibrate(VIBRATION_STEP);
-      lastVibrationTime = time;
-    }
-  };
-
-  const stop = () => {
-    holding = false;
-    interval = 200;
-    lastTime = 0;
-    lastVibrationTime = 0;
-
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = null;
-  };
-
-  const step = (time) => {
-    if (!holding) return;
-
-    if (!lastTime) lastTime = time;
-
-    if (time - lastTime >= interval) {
-      changeBy(delta);
-      vibrateStep(time);
-
-      lastTime = time;
-      interval = Math.max(40, interval * 0.85);
-    }
-
-    rafId = requestAnimationFrame(step);
-  };
-
-  button.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-    holding = true;
-
-    // одиночный шаг — ВСЕГДА с вибрацией
-    changeBy(delta);
-    if (canVibrate()) navigator.vibrate(VIBRATION_STEP);
-
-    rafId = requestAnimationFrame(step);
-  });
-
-  ["pointerup", "pointerleave", "pointercancel"].forEach((evt) =>
-    button.addEventListener(evt, stop)
-  );
-};
-
-setupArrow(arrowLeft, -STEP_INPUT);
-setupArrow(arrowRight, STEP_INPUT);
-
+useArrowHold({
+  button: arrowRight,
+  onStep: () => changeBy(STEP_INPUT),
+});
 
   /* =========================
      MARKER TOGGLE
