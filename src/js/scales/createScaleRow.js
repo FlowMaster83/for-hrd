@@ -142,7 +142,9 @@ export function createScaleRow(labelTitle, container) {
     Object.entries(markers).forEach(([type, marker]) => {
       if (marker.classList.contains("active")) {
         marker.style.left =
-          type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
+          type === "check"
+            ? `calc(${val}% + 8px)`
+            : `${val}%`;
       }
     });
   };
@@ -183,15 +185,17 @@ export function createScaleRow(labelTitle, container) {
   ========================= */
 
   const toggleMarker = (type) => {
-    Object.values(markers).forEach((m) => {
-      m.classList.remove("active");
-      m.style.left = "";
+    // сброс предыдущего состояния
+    Object.values(markers).forEach((marker) => {
+      marker.classList.remove("active");
+      marker.style.left = "";
     });
 
-    Object.values(buttons).forEach((b) => {
-      b.classList.remove("marker-active");
+    Object.values(buttons).forEach((button) => {
+      button.classList.remove("marker-active");
     });
 
+    // активация текущего
     const marker = markers[type];
     const button = buttons[type];
 
@@ -199,7 +203,9 @@ export function createScaleRow(labelTitle, container) {
     button.classList.add("marker-active");
 
     marker.style.left =
-      type === "check" ? `calc(${getValue()}% + 8px)` : `${getValue()}%`;
+      type === "check"
+        ? `calc(${getValue()}% + 8px)`
+        : `${getValue()}%`;
   };
 
   Object.entries(buttons).forEach(([type, btn]) => {
@@ -207,20 +213,22 @@ export function createScaleRow(labelTitle, container) {
   });
 
   /* =========================
-     RESET (единая логика)
+     RESET (единая точка правды)
   ========================= */
 
   const resetScale = () => {
+    // значение
     setValue(0);
 
-    Object.values(markers).forEach((m) => {
-      m.classList.remove("active");
-      m.style.left = "";
+    // маркеры
+    Object.values(markers).forEach((marker) => {
+      marker.classList.remove("active");
+      marker.style.left = "";
     });
 
-    Object.values(buttons).forEach((b) => {
-      b.style.backgroundColor = "";
-      b.style.borderColor = "";
+    // кнопки маркеров
+    Object.values(buttons).forEach((button) => {
+      button.classList.remove("marker-active");
     });
   };
 
