@@ -15,7 +15,7 @@
   align-items: center;
 }
 
-/* 🔑 ОТДЕЛЬНЫЙ LAYOUT ДЛЯ ХЕДЕРА */
+/* layout хедера */
 .header-layout {
   display: flex;
   align-items: center;
@@ -27,14 +27,26 @@
   padding: 0 var(--layout-padding);
 }
 
-/* логотип */
+/* === ЛОГОТИП === */
 .main-logo {
-  font-size: 22px;
+  display: flex;
+  align-items: center;
+
+  height: 100%;
   color: var(--logo-color);
-  font-weight: 700;
+
   text-decoration: none;
   cursor: pointer;
 }
+
+/* SVG внутри */
+.main-logo img {
+  height: 32px;          /* контрольная высота логотипа */
+  width: auto;
+
+  display: block;
+}
+
 
 /* контролы */
 .header-options {
