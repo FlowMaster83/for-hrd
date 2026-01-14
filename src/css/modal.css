@@ -42,6 +42,43 @@
 }
 
 /* =========================================================
+   MODAL CLOSE BUTTON
+========================================================= */
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  line-height: 1;
+
+  color: var(--text-color);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+
+  cursor: pointer;
+  z-index: 20;
+}
+
+.modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.modal-close-btn:active {
+  transform: scale(0.96);
+}
+
+
+/* =========================================================
    MODAL BODY
 ========================================================= */
 

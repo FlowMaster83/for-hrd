@@ -1,14 +1,24 @@
 import { renderModalResults } from "./modalContent.js";
 
 /* =========================================================
-   UTILS
+   CONFIG
 ========================================================= */
+
+const MODAL_MIN_WIDTH = 641;
 
 /* =========================================================
    STATE
 ========================================================= */
 
 let modalRoot = null;
+
+/* =========================================================
+   UTILS
+========================================================= */
+
+function isModalAllowed() {
+  return window.innerWidth >= MODAL_MIN_WIDTH;
+}
 
 /* =========================================================
    MODAL CREATION
@@ -25,6 +35,15 @@ function createModal() {
     <div class="modal__overlay" data-close-modal></div>
 
     <div class="modal__content" role="dialog" aria-modal="true">
+      <button
+        class="modal-close-btn"
+        type="button"
+        aria-label="Close results"
+        data-close-modal
+      >
+        ×
+      </button>
+
       <section class="modal__body"></section>
     </div>
   `;
@@ -41,6 +60,7 @@ function createModal() {
 
 export function openModal(contentNode) {
   if (!contentNode) return;
+  if (!isModalAllowed()) return;
 
   const modal = createModal();
   const body = modal.querySelector(".modal__body");
@@ -54,12 +74,14 @@ export function openModal(contentNode) {
   document.body.style.overflow = "hidden";
 }
 
-
 export function closeModal() {
   if (!modalRoot) return;
 
   modalRoot.classList.remove("is-open");
   modalRoot.setAttribute("aria-hidden", "true");
+
+  const body = modalRoot.querySelector(".modal__body");
+  if (body) body.innerHTML = "";
 
   document.body.style.overflow = "";
 }
@@ -70,8 +92,11 @@ export function closeModal() {
 
 document.addEventListener("click", (e) => {
   const openBtn = e.target.closest("[data-open-modal]");
+  const closeBtn = e.target.closest("[data-close-modal]");
 
   if (openBtn) {
+    if (!isModalAllowed()) return;
+
     const resultsNode = renderModalResults();
     if (!resultsNode) return;
 
@@ -79,11 +104,10 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  if (e.target.closest("[data-close-modal]")) {
+  if (closeBtn) {
     closeModal();
   }
 });
-
 
 /* =========================================================
    SAFETY: RESIZE
