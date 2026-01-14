@@ -52,7 +52,7 @@
   height: 100%;
   background-color: var(--scale-bg-color);
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .chart-fill {
