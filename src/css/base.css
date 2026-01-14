@@ -45,10 +45,6 @@
   --modal-head-overlap: -8px;
 }
 
-* {
-  outline: 1px solid red;
-}
-
 *,
 *::before,
 *::after {
