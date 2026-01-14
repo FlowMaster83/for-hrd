@@ -1,3 +1,4 @@
+/* modal.css */
 /* =========================================================
    MODAL ROOT (DESKTOP / TABLET ONLY)
 ========================================================= */
@@ -53,15 +54,15 @@
 }
 
 /* =========================================================
-   MODAL SCALE HEADER (CANONICAL — MATCHES RESULTS)
+   MODAL SCALE HEADER (CANONICAL)
 ========================================================= */
 
 .modal-scale-head {
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 }
 
 /*
-  Grid MUST match .result-row:
+  Grid MUST match .result-row
   left  — labels / logo
   right — scales
 */
@@ -70,16 +71,7 @@
   grid-template-columns: 200px 1fr;
   grid-template-rows: auto auto auto;
   column-gap: 24px;
-  align-items: center;
-
-    grid-template-rows:
-    min-content   /* уровни */
-    min-content   /* логотип */
-    min-content;  /* проценты */
-
-  row-gap: 1px;   /* ← ТЕПЕРЬ ТЫ УПРАВЛЯЕШЬ РАССТОЯНИЕМ */
-
-  column-gap: 24px;
+  row-gap: 6px;
   align-items: center;
 }
 
@@ -97,6 +89,13 @@
   color: var(--main-red-color);
 }
 
+.scale-head-levels > .level {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ---------- ROW 2: LOGO ---------- */
 
 .scale-head-grid .main-logo {
@@ -109,13 +108,6 @@
 
   color: var(--logo-color);
   text-decoration: none;
-}
-
-.scale-head-levels > .level {
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .scale-head-grid .main-logo img {
@@ -145,21 +137,19 @@
 
   width: 100%;
   height: 16px;
-  margin-top: 2px;
 
   font-size: 14px;
   font-weight: 600;
   color: var(--primary-blue);
 }
 
-/* позиционирование значений */
 .scale-head-values .value {
   position: absolute;
   transform: translateX(-50%);
   white-space: nowrap;
 }
 
-/* края */
+/* edges */
 .scale-head-values .v0 {
   left: 0%;
   transform: none;
@@ -185,7 +175,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: -4px;
 }
 
 /*
@@ -228,27 +217,46 @@
    MARKERS (INSIDE MODAL)
 ========================================================= */
 
-/*
-  Маркеры клонируются внутрь .chart-track,
-  поэтому им нужна та же логика слоёв
-*/
 .result-scale .chart-marker {
   z-index: 10;
 }
 
 /* =========================================================
-   MODAL SCALE HEADER — FONT SIZE ADAPTATION
+   TABLET COMPRESSION
+   starts at 1024px (INTENTIONAL)
 ========================================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 
-  /* LOW / AVERAGE / HIGH */
+  /* body paddings */
+  .modal__body {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  /* header text */
   .scale-head-levels {
     font-size: 14px;
   }
 
-  /* 0 / 33 / 66 / 100 */
   .scale-head-values {
     font-size: 12px;
+  }
+}
+
+/* =========================================================
+   COMPACT — BEFORE MOBILE CUT-OFF
+========================================================= */
+
+@media (max-width: 640px) {
+
+  .modal__body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .modal__content {
+    width: calc(100% - 16px);
+    margin: 3vh auto;
   }
 }
