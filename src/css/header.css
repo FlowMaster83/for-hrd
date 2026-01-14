@@ -1,16 +1,15 @@
 /* header.css */
 
 .header {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: var(--header-height);
   z-index: 100;
-
   background: var(--header-bg-color);
   border-bottom: 1px solid var(--border-color);
-
   display: flex;
   align-items: center;
 }
@@ -20,37 +19,50 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   width: 100%;
   max-width: var(--layout-max-width);
   margin: 0 auto;
   padding: 0 var(--layout-padding);
+  box-sizing: border-box;
 }
 
 /* === ЛОГОТИП === */
 .main-logo {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-
   height: 100%;
   color: var(--logo-color);
-
   text-decoration: none;
   cursor: pointer;
 }
 
 /* SVG внутри */
 .main-logo img {
-  height: 32px;          /* контрольная высота логотипа */
+  height: var(--logo-height);
   width: auto;
-
   display: block;
 }
 
+.main-logo-text {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.main-logo-text::after {
+  content: "™";
+  font-size: 0.7em;
+  vertical-align: super;
+  margin-left: 2px;
+}
 
 /* контролы */
 .header-options {
+  min-width: 0;
   display: flex;
+  flex: 1;
+  justify-content: flex-end;
   align-items: center;
   gap: 12px;
 }

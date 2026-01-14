@@ -1,14 +1,8 @@
 import { renderModalResults } from "./modalContent.js";
 
-const MODAL_BREAKPOINT = 768;
-
 /* =========================================================
    UTILS
 ========================================================= */
-
-function isModalAllowed() {
-  return window.innerWidth >= MODAL_BREAKPOINT;
-}
 
 /* =========================================================
    STATE
@@ -46,7 +40,6 @@ function createModal() {
 ========================================================= */
 
 export function openModal(contentNode) {
-  if (!isModalAllowed()) return;
   if (!contentNode) return;
 
   const modal = createModal();
@@ -58,9 +51,9 @@ export function openModal(contentNode) {
   modal.classList.add("is-open");
   modal.setAttribute("aria-hidden", "false");
 
-  // optional: блокируем скролл страницы
   document.body.style.overflow = "hidden";
 }
+
 
 export function closeModal() {
   if (!modalRoot) return;
@@ -79,9 +72,6 @@ document.addEventListener("click", (e) => {
   const openBtn = e.target.closest("[data-open-modal]");
 
   if (openBtn) {
-    // ⛔ mobile: модалки не существует
-    if (!isModalAllowed()) return;
-
     const resultsNode = renderModalResults();
     if (!resultsNode) return;
 
@@ -89,11 +79,11 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  // закрытие ТОЛЬКО по клику на backdrop
   if (e.target.closest("[data-close-modal]")) {
     closeModal();
   }
 });
+
 
 /* =========================================================
    SAFETY: RESIZE

@@ -1,38 +1,20 @@
 // src/js/components/modalContent.js
 
-/**
- * Утилита: проверка desktop-режима
- */
-function isDesktop() {
-  return window.matchMedia("(min-width: 768px)").matches;
-}
-
-/**
- * Главная функция.
- * Формирует DOM для тела модалки ТОЛЬКО на desktop.
- * На mobile возвращает null.
- */
 export function renderModalResults() {
-  if (!isDesktop()) {
-    return null;
-  }
-
   const container = document.createElement("div");
   container.className = "results";
 
-  // header над шкалами
   container.appendChild(renderModalScaleHeader());
 
-  // строки результатов
   const scaleRows = document.querySelectorAll(".scale-row");
 
   scaleRows.forEach((row) => {
-    const resultRow = renderResultRow(row);
-    container.appendChild(resultRow);
+    container.appendChild(renderResultRow(row));
   });
 
   return container;
 }
+
 
 /* =========================================================
    SCALE HEADER (LOW / AVERAGE / HIGH)

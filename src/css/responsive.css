@@ -1,4 +1,11 @@
 /* responsive.css */
+@media (min-width: 1025px) {
+  .scale-row {
+    grid-template-columns: 240px 1fr auto;
+  }
+}
+
+
 @media (max-width: 1024px) {
   .scale-row {
     grid-template-columns: 240px 1fr;
@@ -30,20 +37,15 @@
 }
 
 /* =========================================================
-   ≤ 768px — hide modal trigger
-========================================================= */
-
-@media (max-width: 768px) {
-  [data-open-modal] {
-    display: none !important;
-  }
-}
-
-/* =========================================================
    ≤ 640px — stacked layout, simplified scale
 ========================================================= */
 
 @media (max-width: 640px) {
+
+  .header-options .header-label {
+    display: none;
+  }
+
   .scale-row {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -99,6 +101,10 @@
   .main-logo {
     font-size: 18px;
   }
+
+    .main-logo-text {
+    font-size: 12px;
+}
 }
 
 /* =========================================================
@@ -106,14 +112,13 @@
 ========================================================= */
 
 @media (max-width: 480px) {
-
   main {
     padding-top: 20px;
     margin-top: 0;
   }
 
   .header {
-    top: auto;              /* ОБЯЗАТЕЛЬНО */
+    top: auto;
     bottom: 0;
     left: 0;
     right: 0;
@@ -121,9 +126,28 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  .header-options .header-label {
-    display: none;
+  .logo-text::after {
+    content: "™";
+    font-size: 0.7em;
+    vertical-align: super;
+    margin-left: 2px;
+}
+
+  .main-logo-text {
+    font-size: 10px;
+}
+
+  [data-open-modal] {
+    font-size: 0;
   }
+
+  [data-open-modal]::after {
+    content: "R";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
 
   .scale-row .actions {
     gap: 6px;
@@ -173,4 +197,10 @@
   .arrow-btn {
     display: inline-flex;
   }
+}
+
+@media (max-width: 440px) {
+    .main-logo-text {
+    display: none;
+}
 }

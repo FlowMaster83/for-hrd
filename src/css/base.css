@@ -9,6 +9,7 @@
 
   --main-red-color: #FB3D3F;
   --logo-color: #FB3D3F;
+  --logo-height: 32px;
 
   --primary-blue: #0059b3;
   --secondary-blue: #7ec0ee;
@@ -44,6 +45,10 @@
   --modal-head-overlap: -8px;
 }
 
+* {
+  outline: 1px solid red;
+}
+
 *,
 *::before,
 *::after {
@@ -59,5 +64,6 @@ body {
 }
 
 html, body {
+  width: 100%;
   overflow-x: hidden;
 }
