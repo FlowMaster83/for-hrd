@@ -1,14 +1,37 @@
 // src/js/pdf/exportResultsToPDF.js
 
 export function exportResultsToPDF() {
-  const content = document.querySelector("[data-modal-results]");
-  if (!content) return;
+  const source = document.querySelector("[data-modal-results]");
+  if (!source) return;
 
   /* =========================================================
-     PREPARE DOM FOR PDF
+     CREATE OFFSCREEN CLONE
   ========================================================= */
 
-  document.body.classList.add("is-exporting-pdf");
+  // Клонируем только PDF-контент
+  const clone = source.cloneNode(true);
+
+  // Обёртка — носитель pdf.css
+  const wrapper = document.createElement("div");
+  wrapper.className = "is-exporting-pdf";
+
+  // Убираем из визуального потока
+  Object.assign(wrapper.style, {
+    position: "fixed",
+    top: "0",
+    left: "-10000px",
+    width: "1000px",          // стабильная ширина для A4
+    background: "#ffffff",
+    pointerEvents: "none",
+    zIndex: "-1"
+  });
+
+  wrapper.appendChild(clone);
+  document.body.appendChild(wrapper);
+
+  /* =========================================================
+     PDF OPTIONS
+  ========================================================= */
 
   const options = {
     margin: 10,
@@ -39,9 +62,9 @@ export function exportResultsToPDF() {
 
   html2pdf()
     .set(options)
-    .from(content)
+    .from(clone)
     .save()
     .finally(() => {
-      document.body.classList.remove("is-exporting-pdf");
+      wrapper.remove();
     });
 }
