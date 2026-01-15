@@ -1,9 +1,28 @@
 /* pdf.css */
 /* =========================================================
-   PDF EXPORT MODE — DOCUMENT (ALWAYS LIGHT)
+   PDF EXPORT — DOCUMENT MODE (CANONICAL)
 ========================================================= */
 
-/* ---------- GLOBAL RESET ---------- */
+/* =========================================================
+   1. PDF MODE ACTIVATION
+========================================================= */
+
+.is-exporting-pdf {
+  /* document tokens */
+  --pdf-bg: #ffffff;
+  --pdf-text: #000000;
+
+  --pdf-brand: #d32f2f;
+  --pdf-accent: #003a8f;
+
+  --pdf-track: #f0f0f0;
+  --pdf-fill-start: #7aa9e6;
+  --pdf-fill-end: #4a7fd6;
+}
+
+/* =========================================================
+   2. GLOBAL CLEANUP (VISUAL NOISE)
+========================================================= */
 
 .is-exporting-pdf * {
   box-shadow: none !important;
@@ -12,57 +31,51 @@
   animation: none !important;
 }
 
-/* ---------- DOCUMENT THEME OVERRIDE ---------- */
+/* =========================================================
+   3. DOCUMENT BACKGROUND
+========================================================= */
 
-.is-exporting-pdf {
-  /* базовая типографика */
+.is-exporting-pdf .modal__content {
+  background: var(--pdf-bg);
+}
+
+/* =========================================================
+   4. DOCUMENT TYPOGRAPHY
+========================================================= */
+
+/* только контент PDF */
+.is-exporting-pdf [data-modal-results] {
+  color: var(--pdf-text);
   font-size: 14px;
   line-height: 1.4;
-  background: #ffffff;
-  overflow-x: hidden;
-
-  /* ПЕРЕОПРЕДЕЛЯЕМ ВСЕ КЛЮЧЕВЫЕ ЦВЕТА */
-  --modal-bg-color: #ffffff;
-  --text-color: #000000;
-  --logo-color: #d32f2f;
-
-  --primary-blue: #003a8f;
-  --main-red-color: #d32f2f;
-
-  /* шкалы */
-  --chart-track-bg: #f0f0f0;
-  --chart-fill-bg: linear-gradient(
-    to right,
-    #7aa9e6 0%,
-    #4a7fd6 100%
-  );
 }
 
 /* =========================================================
-   FORCE SCALE COLORS (CRITICAL)
+   5. BRANDING (LOGO)
 ========================================================= */
 
-/* трек шкалы */
+.is-exporting-pdf .main-logo {
+  color: var(--pdf-brand);
+}
+
+/* =========================================================
+   6. SCALE COLORS (FORCED DOCUMENT STYLE)
+========================================================= */
+
 .is-exporting-pdf .chart-track {
-  background: var(--chart-track-bg) !important;
+  background: var(--pdf-track) !important;
 }
 
-/* заполненная часть */
 .is-exporting-pdf .chart-fill {
-  background: var(--chart-fill-bg) !important;
+  background: linear-gradient(
+    to right,
+    var(--pdf-fill-start),
+    var(--pdf-fill-end)
+  ) !important;
 }
 
 /* =========================================================
-   LOGO FIX
-========================================================= */
-
-/* текст HIREBOX должен совпадать с логотипом */
-.is-exporting-pdf .main-logo-text {
-  color: inherit !important;
-}
-
-/* =========================================================
-   GEOMETRY (A4 FRIENDLY)
+   7. A4 GEOMETRY
 ========================================================= */
 
 .is-exporting-pdf .modal__body {
@@ -77,24 +90,18 @@
 
 .is-exporting-pdf [data-modal-results] {
   max-width: 100%;
-  color: #000;
 }
 
 /* =========================================================
-   LEFT COLUMN — LABEL + VALUE (NO WRAP)
+   8. LEFT COLUMN — NO WRAP
 ========================================================= */
 
 .is-exporting-pdf .result-label {
   white-space: nowrap;
 }
 
-.is-exporting-pdf .result-title,
-.is-exporting-pdf .result-value {
-  display: inline;
-}
-
 /* =========================================================
-   SCALE HEADER FIXES (0 / 33 / 66 / 100)
+   9. SCALE HEADER EDGE FIX
 ========================================================= */
 
 .is-exporting-pdf .scale-head-values .v100 {
@@ -108,7 +115,7 @@
 }
 
 /* =========================================================
-   DOCUMENT RHYTHM
+   10. DOCUMENT RHYTHM
 ========================================================= */
 
 .is-exporting-pdf .modal-scale-head {
