@@ -20,6 +20,10 @@ function isModalAllowed() {
   return window.innerWidth >= MODAL_MIN_WIDTH;
 }
 
+function isModalOpen() {
+  return modalRoot && modalRoot.classList.contains("is-open");
+}
+
 /* =========================================================
    MODAL CREATION
 ========================================================= */
@@ -75,7 +79,7 @@ export function openModal(contentNode) {
 }
 
 export function closeModal() {
-  if (!modalRoot) return;
+  if (!isModalOpen()) return;
 
   modalRoot.classList.remove("is-open");
   modalRoot.setAttribute("aria-hidden", "true");
@@ -90,6 +94,7 @@ export function closeModal() {
    GLOBAL EVENTS
 ========================================================= */
 
+/* Open / Close by click */
 document.addEventListener("click", (e) => {
   const openBtn = e.target.closest("[data-open-modal]");
   const closeBtn = e.target.closest("[data-close-modal]");
@@ -109,12 +114,20 @@ document.addEventListener("click", (e) => {
   }
 });
 
+/* Close on ESC */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (!isModalOpen()) return;
+
+  closeModal();
+});
+
 /* =========================================================
    SAFETY: RESIZE
 ========================================================= */
 
 window.addEventListener("resize", () => {
-  if (!isModalAllowed()) {
+  if (!isModalAllowed() && isModalOpen()) {
     closeModal();
   }
 });
