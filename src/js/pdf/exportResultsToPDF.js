@@ -64,8 +64,8 @@ export async function exportResultsToPDF() {
     margin: 10,
     filename: "results.pdf",
     image: {
-      type: "jpeg",
-      quality: 0.98,
+      type: "png",
+      quality: 1,
     },
     html2canvas: {
       scale: 3,
