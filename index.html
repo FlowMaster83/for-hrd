@@ -30,30 +30,37 @@
   </head>
 
   <body>
-    <!-- ======================
-         HEADER
-    ======================= -->
-    <header class="header">
-      <div class="header-layout">
-        <a class="main-logo">
-          <img src="./svg/logo.svg" alt="Logo" />
-          <span class="main-logo-text">HIREBOX</span>
-        </a>
-        <div id="header-controls-root" class="header-options"></div>
-      </div>
-    </header>
-
-    <!-- ======================
-         MAIN CONTENT
-    ======================= -->
-    <main>
-      <section>
-        <div class="layout">
-          <!-- основной контент -->
-          <div id="scales-container"></div>
+    <!-- =================================================
+         APP ROOT (ЕДИНЫЙ STACKING CONTEXT)
+    ================================================== -->
+    <div id="app-root">
+      <!-- ======================
+           HEADER
+      ======================= -->
+      <header class="header">
+        <div class="header-layout">
+          <a class="main-logo">
+            <img src="./svg/logo.svg" alt="Logo" />
+            <span class="main-logo-text">HIREBOX</span>
+          </a>
+          <div id="header-controls-root" class="header-options"></div>
         </div>
-      </section>
-    </main>
+      </header>
+
+      <!-- ======================
+           MAIN CONTENT
+      ======================= -->
+      <main>
+        <section>
+          <div class="layout">
+            <div id="scales-container"></div>
+          </div>
+        </section>
+      </main>
+
+      <!-- модалки тоже должны жить здесь -->
+      <div id="modal-root"></div>
+    </div>
 
     <!-- ======================
          SCRIPTS

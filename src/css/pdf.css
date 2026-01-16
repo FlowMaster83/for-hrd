@@ -3,6 +3,8 @@
    Активируется классом: html.is-exporting-pdf
 ========================================================= */
 
+
+
 /* =========================================================
    2. CANONICAL PDF DESIGN TOKENS
    Полная изоляция от light / dark темы приложения
@@ -114,12 +116,22 @@ html.is-exporting-pdf .modal-scale-head {
 .pdf-snapshot-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10000;
-  background: transparent;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+:root:not([data-theme="dark"]) .pdf-snapshot-overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .pdf-snapshot-overlay {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .pdf-snapshot-overlay img {
+  position: absolute;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-width: none;
+  max-height: none;
 }

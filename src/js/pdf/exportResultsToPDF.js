@@ -7,14 +7,25 @@ export async function exportResultsToPDF() {
     return;
   }
 
-  // === 1. SNAPSHOT ТОЛЬКО СТАБИЛЬНОГО КОНТЕЙНЕРА ===
-  const modalRoot = source.closest(".modal"); // важно: не body
+  const modalRoot = source.closest(".modal");
+  if (!modalRoot) return;
+
+  const appRoot = document.getElementById("app-root");
+  if (!appRoot) return;
+
+  /* =========================================================
+     1. SNAPSHOT МОДАЛКИ (БЕЗ ФОНА)
+  ========================================================= */
 
   const snapshotCanvas = await window.html2canvas(modalRoot, {
     scale: 1,
     useCORS: true,
-    backgroundColor: "#ffffff",
+    backgroundColor: null,
   });
+
+  /* =========================================================
+     2. SNAPSHOT OVERLAY ВНУТРИ APP-ROOT
+  ========================================================= */
 
   const snapshotOverlay = document.createElement("div");
   snapshotOverlay.className = "pdf-snapshot-overlay";
@@ -22,19 +33,40 @@ export async function exportResultsToPDF() {
   const img = document.createElement("img");
   img.src = snapshotCanvas.toDataURL("image/png");
 
-  snapshotOverlay.appendChild(img);
-  document.body.appendChild(snapshotOverlay);
+  const rect = modalRoot.getBoundingClientRect();
+  const appRect = appRoot.getBoundingClientRect();
 
-  // === 2. ТЕПЕРЬ МОЖНО МЕНЯТЬ DOM ===
+  Object.assign(img.style, {
+    position: "absolute",
+    left: `${rect.left - appRect.left}px`,
+    top: `${rect.top - appRect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+  });
+
+  snapshotOverlay.appendChild(img);
+  appRoot.appendChild(snapshotOverlay);
+
+  /* =========================================================
+     3. PDF-РЕЖИМ ПОД SNAPSHOT
+  ========================================================= */
+
   document.documentElement.classList.add("is-exporting-pdf");
 
   await new Promise(requestAnimationFrame);
   await new Promise(requestAnimationFrame);
 
+  /* =========================================================
+     4. EXPORT PDF
+  ========================================================= */
+
   const options = {
     margin: 10,
     filename: "results.pdf",
-    image: { type: "jpeg", quality: 0.98 },
+    image: {
+      type: "jpeg",
+      quality: 0.98,
+    },
     html2canvas: {
       scale: 3,
       useCORS: true,
