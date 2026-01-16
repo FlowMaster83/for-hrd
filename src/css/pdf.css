@@ -39,7 +39,6 @@ html.is-exporting-pdf {
   --button-border-color: #cccccc;
 }
 
-
 /* =========================================================
    2. GLOBAL PDF SANITIZATION
    Убираем UI-шум (анимации, тени, caret)
@@ -54,7 +53,6 @@ html.is-exporting-pdf * {
   caret-color: transparent;
 }
 
-
 /* =========================================================
    3. DOCUMENT TYPOGRAPHY
 ========================================================= */
@@ -64,7 +62,6 @@ html.is-exporting-pdf [data-modal-results] {
   font-size: 14px;
   line-height: 1.45;
 }
-
 
 /* =========================================================
    4. DOCUMENT GEOMETRY (A4 OPTIMIZED)
@@ -85,8 +82,6 @@ html.is-exporting-pdf {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 /* =========================================================
    5. LEFT COLUMN BEHAVIOR
 ========================================================= */
@@ -97,7 +92,6 @@ html.is-exporting-pdf .scale-label {
   font-weight: 700;
   color: #111111;
 }
-
 
 /* =========================================================
    6. SCALE VISUALS (READABILITY BOOST)
@@ -115,7 +109,6 @@ html.is-exporting-pdf .chart-fill {
       #6fa3e0,
       #3f6fc8);
 }
-
 
 /* =========================================================
    7. TICKS — ЦИФРЫ И ЛИНИИ
@@ -140,7 +133,6 @@ html.is-exporting-pdf .tick-line {
   width: 1px;
 }
 
-
 /* =========================================================
    8. SCALE HEADER EDGE CORRECTIONS
 ========================================================= */
@@ -156,7 +148,6 @@ html.is-exporting-pdf .scale-head-values .v0 {
   left: 0%;
   transform: none;
 }
-
 
 /* =========================================================
    9. VALUES & INPUTS
@@ -174,7 +165,6 @@ html.is-exporting-pdf .user-input {
   border-radius: 4px;
   border-color: #bbbbbb;
 }
-
 
 /* =========================================================
    10. ROW RHYTHM
@@ -198,7 +188,6 @@ html.is-exporting-pdf .modal-scale-head:last-child {
   margin-bottom: 0;
 }
 
-
 /* =========================================================
    11. HIDE UI-ONLY ELEMENTS (PDF DOES NOT NEED THEM)
 ========================================================= */
@@ -208,7 +197,6 @@ html.is-exporting-pdf .arrow-btn,
 html.is-exporting-pdf button {
   display: none !important;
 }
-
 
 /* =========================================================
    12. SNAPSHOT OVERLAY (CONTROLLED LAST FRAME)
