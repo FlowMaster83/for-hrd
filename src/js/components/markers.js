@@ -1,19 +1,20 @@
 // markers.js
+
 export const MARKER_SVGS = {
   star: `
     <svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 480 519"
-  class="marker-svg"
->
-  <g
-    transform="translate(0,519) scale(0.1,-0.1)"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="120"
-  >
-    <path
-      d="M1741 4489 c-1 -3 5 -106 13 -230 8 -123 17 -278 21 -344 3 -66 13
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 480 519"
+      class="marker-svg"
+      aria-hidden="true"
+    >
+      <g
+        transform="translate(0,519) scale(0.1,-0.1)"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="120"
+      >
+        <path d="M1741 4489 c-1 -3 5 -106 13 -230 8 -123 17 -278 21 -344 3 -66 13
 -236 21 -378 9 -142 13 -264 10 -272 -7 -18 -82 -20 -219 -5 -51 5 -182 14
 -292 20 -110 7 -234 15 -275 20 -102 12 -340 24 -340 18 0 -5 122 -125 219
 -218 55 -51 379 -366 504 -488 59 -58 107 -111 107 -117 0 -14 -455 -465 -808
@@ -31,40 +32,34 @@ export const MARKER_SVGS = {
 -4 19 -2 22 2 4 7 79 10 167 7 164 23 488 31 630 2 44 7 139 10 210 3 72 8
 140 11 153 10 51 -14 26 -181 -184 -38 -49 -106 -132 -150 -184 -44 -53 -94
 -114 -111 -136 -140 -174 -189 -234 -217 -268 -17 -21 -41 -51 -52 -67 -11
--16 -29 -32 -39 -35 -20 -7 -24 -4 -76 66 -14 18 -30 38 -35 44 -6 6 -63 76
--127 156 -64 80 -130 160 -145 179 -15 18 -54 66 -86 105 -32 39 -66 80 -75
-91 -10 11 -33 40 -52 65 -19 25 -42 54 -52 65 -58 71 -85 104 -100 126 -9 13
--17 21 -17 18z"
-    />
-  </g>
-</svg>
+-16 -29 -32 -39 -35 -20 -7 -24 -4 -76 66z"/>
+      </g>
+    </svg>
   `,
 
   check: `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path
-    d="M4 13l5 5 11-11"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="3"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-</svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 13l5 5 11-11"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   `,
 };
 
 /**
- * Создаёт маркер шкалы
- * @param {string} type - тип маркера (star, check)
- * @param {number} value - значение в процентах (0–100)
+ * Создаёт ВИЗУАЛЬНЫЙ маркер шкалы
+ * @param {"star"|"check"|"solid"|"dotted"} type
  */
-export function createMarker(type, value) {
+export function createMarker(type) {
   const el = document.createElement("div");
 
   el.className = `chart-marker marker-${type}`;
-  el.dataset.value = value; // 🔑 ИСТОЧНИК ИСТИНЫ
-  el.style.left = `${value}%`; // 🔑 ВИЗУАЛЬНАЯ ПОЗИЦИЯ
+  el.setAttribute("aria-hidden", "true");
 
   if (MARKER_SVGS[type]) {
     el.innerHTML = MARKER_SVGS[type];

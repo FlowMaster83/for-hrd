@@ -1,3 +1,5 @@
+/* pdf.css */
+
 /* =========================================================
    PDF EXPORT — DOCUMENT MODE (CANONICAL)
    Активируется классом: html.is-exporting-pdf
@@ -38,6 +40,15 @@ html.is-exporting-pdf {
   --button-text-color: #000000;
   --button-border-color: #cccccc;
 }
+
+html.is-exporting-pdf .chart-marker {
+  color: var(--primary-blue);
+}
+
+html.is-exporting-pdf .chart-track {
+  overflow: visible !important;
+}
+
 
 /* =========================================================
    2. GLOBAL PDF SANITIZATION
@@ -194,9 +205,11 @@ html.is-exporting-pdf .modal-scale-head:last-child {
 
 html.is-exporting-pdf .actions,
 html.is-exporting-pdf .arrow-btn,
-html.is-exporting-pdf button {
+html.is-exporting-pdf .modal-close-btn,
+html.is-exporting-pdf .modal-controls {
   display: none !important;
 }
+
 
 /* =========================================================
    12. SNAPSHOT OVERLAY (CONTROLLED LAST FRAME)

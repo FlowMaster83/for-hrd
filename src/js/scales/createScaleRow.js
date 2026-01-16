@@ -12,71 +12,38 @@ export function createScaleRow(labelTitle, container) {
   row.className = "scale-row";
 
   row.innerHTML = `
-  <div class="label">
-    <span class="scale-label">${labelTitle}</span>:
-    <span class="percent-value">0</span>
-  </div>
-
-  <div class="value">
-    <div class="chart-wrapper">
-      <div class="chart-track">
-        <div class="chart-fill"></div>
-        <div class="ticks"></div>
-      </div>
+    <div class="label">
+      <span class="scale-label">${labelTitle}</span>:
+      <span class="percent-value">0</span>
     </div>
 
-    <input
-      class="user-input"
-      type="number"
-      placeholder="0"
-      min="0"
-      max="100"
-    />
-  </div>
+    <div class="value">
+      <div class="chart-wrapper">
+        <div class="chart-track">
+          <div class="chart-fill"></div>
+          <div class="ticks"></div>
+        </div>
+      </div>
 
-  <div class="actions">
-    <button
-      class="circle-btn"
-      type="button"
-      data-marker="circle"
-      data-label="CIRCLE"
-      data-short="C"
-    >CIRCLE</button>
+      <input
+        class="user-input"
+        type="number"
+        placeholder="0"
+        min="0"
+        max="100"
+      />
+    </div>
 
-    <button
-      class="dotted-btn"
-      type="button"
-      data-marker="dash"
-      data-label="DASH"
-      data-short="D"
-    >DASH</button>
-
-    <button
-      class="star-btn"
-      type="button"
-      data-marker="star"
-      data-label="STAR"
-      data-short="S"
-    >STAR</button>
-
-    <button
-      class="check-btn"
-      type="button"
-      data-marker="check"
-      data-label="CHECK"
-      data-short="✓"
-    >CHECK</button>
-
-    <button class="clear-btn" type="button">CLEAR</button>
-
-    <button class="arrow-btn arrow-left" type="button">←</button>
-    <button class="arrow-btn arrow-right" type="button">→</button>
-  </div>
-`;
-
-  /* =========================
-     DOM
-  ========================= */
+    <div class="actions">
+      <button data-marker="circle" data-label="CIRCLE" data-short="C">CIRCLE</button>
+      <button data-marker="dash" data-label="DASH" data-short="D">DASH</button>
+      <button data-marker="star" data-label="STAR" data-short="S">STAR</button>
+      <button data-marker="check" data-label="CHECK" data-short="✓">CHECK</button>
+      <button class="clear-btn" type="button">CLEAR</button>
+      <button class="arrow-btn arrow-left" type="button">←</button>
+      <button class="arrow-btn arrow-right" type="button">→</button>
+    </div>
+  `;
 
   const input = row.querySelector(".user-input");
   const fill = row.querySelector(".chart-fill");
@@ -84,42 +51,32 @@ export function createScaleRow(labelTitle, container) {
   const track = row.querySelector(".chart-track");
   const ticks = row.querySelector(".ticks");
 
-  const arrowLeft = row.querySelector(".arrow-left");
-  const arrowRight = row.querySelector(".arrow-right");
-
-  /* =========================
-     TICKS (visual only)
-  ========================= */
+  /* ---------- TICKS ---------- */
 
   const lineNodes = [];
 
-  for (let value = 0; value <= MAX; value += STEP_TICK) {
+  for (let v = 0; v <= MAX; v += STEP_TICK) {
     const tick = document.createElement("div");
     tick.className = "tick";
-    tick.textContent = value;
-    tick.style.left = `${value}%`;
+    tick.textContent = v;
+    tick.style.left = `${v}%`;
 
-    if (value === 0 || value === 50 || value === 100) {
-      tick.classList.add("tick--major");
-    }
-    if (value === 100) {
-      tick.classList.add("tick--end");
-    }
+    if (v === 0 || v === 50 || v === 100) tick.classList.add("tick--major");
+    if (v === 100) tick.classList.add("tick--end");
 
     ticks.appendChild(tick);
 
-    if (value > 0 && value < 100) {
+    if (v > 0 && v < 100) {
       const line = document.createElement("div");
       line.className = "tick-line";
       ticks.appendChild(line);
-      lineNodes.push({ value, el: line });
+      lineNodes.push({ value: v, el: line });
     }
   }
 
   const layoutLines = () => {
     const width = track.clientWidth;
     if (!width) return;
-
     const stepPx = width / (MAX / STEP_TICK);
     lineNodes.forEach(({ value, el }) => {
       el.style.left = `${Math.round((value / STEP_TICK) * stepPx)}px`;
@@ -129,128 +86,75 @@ export function createScaleRow(labelTitle, container) {
   requestAnimationFrame(layoutLines);
   new ResizeObserver(layoutLines).observe(track);
 
-  /* =========================
-     MARKERS
-  ========================= */
+  /* ---------- MARKERS ---------- */
 
   const markers = {
-    solid: createMarker("solid"),
-    dotted: createMarker("dotted"),
+    circle: createMarker("solid"),
+    dash: createMarker("dotted"),
     star: createMarker("star"),
     check: createMarker("check"),
   };
 
   Object.values(markers).forEach((m) => track.appendChild(m));
 
-  const buttons = {
-    solid: row.querySelector(".circle-btn"),
-    dotted: row.querySelector(".dotted-btn"),
-    star: row.querySelector(".star-btn"),
-    check: row.querySelector(".check-btn"),
+  const buttons = {};
+  row.querySelectorAll("[data-marker]").forEach((btn) => {
+    buttons[btn.dataset.marker] = btn;
+  });
+
+  /* ---------- VALUE ---------- */
+
+  const normalize = (v) => {
+    const n = Number(v);
+    if (!Number.isFinite(n) || n <= 0) return 0;
+    return Math.min(n, MAX);
   };
 
-  /* =========================
-     VALUE HELPERS
-  ========================= */
+  const getValue = () => normalize(input.value);
 
-  const normalizeInputValue = (value) => {
-  if (value === "" || value === null) return 0;
-
-  const num = Number(value);
-  if (!Number.isFinite(num) || num <= 0) return 0;
-
-  return Math.min(num, MAX);
-};
-
-
-const getValue = () => normalizeInputValue(input.value);
-
-
-const setValue = (val) => {
-  const next = normalizeInputValue(val);
-
-  // ВАЖНО: сюда всегда попадает уже нормализованное число
-  input.value = next === 0 ? "" : String(next);
-
-  syncVisuals();
-};
-
-
-  const syncVisuals = () => {
-    const val = getValue();
+  const setValue = (v) => {
+    const val = normalize(v);
+    input.value = val === 0 ? "" : val;
     fill.style.width = `${val}%`;
     percentLabel.textContent = val;
 
-    Object.entries(markers).forEach(([type, marker]) => {
-      if (marker.classList.contains("active")) {
-        marker.style.left =
-          type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
+    Object.entries(markers).forEach(([type, m]) => {
+      if (m.classList.contains("active")) {
+        m.style.left = type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
       }
     });
   };
 
-  /* =========================
-     INPUT (keyboard + wheel)
-  ========================= */
+  input.addEventListener("input", () => setValue(input.value));
 
-  input.addEventListener("focus", () => input.select());
+  /* ---------- ARROWS ---------- */
 
-input.addEventListener("input", () => {
-  setValue(input.value);
-});
+  useArrowHold({
+    button: row.querySelector(".arrow-left"),
+    onStep: () => setValue(getValue() - STEP_INPUT),
+  });
 
+  useArrowHold({
+    button: row.querySelector(".arrow-right"),
+    onStep: () => setValue(getValue() + STEP_INPUT),
+  });
 
-  input.addEventListener(
-    "wheel",
-    (e) => {
-      e.preventDefault();
-      const delta = e.deltaY < 0 ? STEP_INPUT : -STEP_INPUT;
-      setValue(getValue() + delta);
-    },
-    { passive: false }
-  );
-
-/* =========================
-   ARROWS (delegated, stable)
-========================= */
-
-const changeBy = (delta) => {
-  setValue(getValue() + delta);
-};
-
-useArrowHold({
-  button: arrowLeft,
-  onStep: () => changeBy(-STEP_INPUT),
-});
-
-useArrowHold({
-  button: arrowRight,
-  onStep: () => changeBy(STEP_INPUT),
-});
-
-  /* =========================
-     MARKER TOGGLE
-  ========================= */
+  /* ---------- MARKER TOGGLE ---------- */
 
   const toggleMarker = (type) => {
-    // сброс предыдущего состояния
-    Object.values(markers).forEach((marker) => {
-      marker.classList.remove("active");
-      marker.style.left = "";
+    Object.values(markers).forEach((m) => {
+      m.classList.remove("active");
+      m.style.left = "";
     });
 
-    Object.values(buttons).forEach((button) => {
-      button.classList.remove("marker-active");
-    });
+    Object.values(buttons).forEach((b) =>
+      b.classList.remove("marker-active")
+    );
 
-    // активация текущего
-    const marker = markers[type];
-    const button = buttons[type];
+    markers[type].classList.add("active");
+    buttons[type].classList.add("marker-active");
 
-    marker.classList.add("active");
-    button.classList.add("marker-active");
-
-    marker.style.left =
+    markers[type].style.left =
       type === "check" ? `calc(${getValue()}% + 8px)` : `${getValue()}%`;
   };
 
@@ -258,39 +162,21 @@ useArrowHold({
     btn.addEventListener("click", () => toggleMarker(type));
   });
 
-  /* =========================
-     RESET (единая точка правды)
-  ========================= */
+  /* ---------- RESET ---------- */
 
   const resetScale = () => {
-    // значение
     setValue(0);
-
-    // маркеры
-    Object.values(markers).forEach((marker) => {
-      marker.classList.remove("active");
-      marker.style.left = "";
+    Object.values(markers).forEach((m) => {
+      m.classList.remove("active");
+      m.style.left = "";
     });
-
-    // кнопки маркеров
-    Object.values(buttons).forEach((button) => {
-      button.classList.remove("marker-active");
-    });
+    Object.values(buttons).forEach((b) =>
+      b.classList.remove("marker-active")
+    );
   };
 
   row.querySelector(".clear-btn").addEventListener("click", resetScale);
 
   container.appendChild(row);
-
-  /* =========================
-     PUBLIC API + REGISTRY
-  ========================= */
-
-  const api = {
-    reset: resetScale,
-  };
-
-  registerScale(api);
-
-  return api;
+  registerScale({ reset: resetScale });
 }

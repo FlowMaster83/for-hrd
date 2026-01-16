@@ -8,24 +8,14 @@ export async function exportResultsToPDF() {
   }
 
   const modalRoot = source.closest(".modal");
-  if (!modalRoot) return;
-
   const appRoot = document.getElementById("app-root");
-  if (!appRoot) return;
-
-  /* =========================================================
-     1. SNAPSHOT МОДАЛКИ (БЕЗ ФОНА)
-  ========================================================= */
+  if (!modalRoot || !appRoot) return;
 
   const snapshotCanvas = await window.html2canvas(modalRoot, {
     scale: 1,
     useCORS: true,
     backgroundColor: null,
   });
-
-  /* =========================================================
-     2. SNAPSHOT OVERLAY ВНУТРИ APP-ROOT
-  ========================================================= */
 
   const snapshotOverlay = document.createElement("div");
   snapshotOverlay.className = "pdf-snapshot-overlay";
@@ -47,25 +37,15 @@ export async function exportResultsToPDF() {
   snapshotOverlay.appendChild(img);
   appRoot.appendChild(snapshotOverlay);
 
-  /* =========================================================
-     3. PDF-РЕЖИМ ПОД SNAPSHOT
-  ========================================================= */
-
   document.documentElement.classList.add("is-exporting-pdf");
 
   await new Promise(requestAnimationFrame);
   await new Promise(requestAnimationFrame);
 
-  /* =========================================================
-     4. EXPORT PDF
-  ========================================================= */
-
   const options = {
     margin: 10,
     filename: "results.pdf",
-    image: {
-      type: "png",
-    },
+    image: { type: "png" },
     html2canvas: {
       scale: 3,
       useCORS: true,
