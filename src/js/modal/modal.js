@@ -1,3 +1,4 @@
+// modal.js
 import { renderModalResults } from "./modalContent.js";
 
 /* =========================================================

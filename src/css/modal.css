@@ -24,6 +24,7 @@
 
 /* =========================================================
    MODAL WRAP (CONTENT + SIDE ACTIONS)
+   Модалка центрируется БЕЗ учёта кнопок
 ========================================================= */
 
 .modal__wrap {
@@ -58,6 +59,9 @@
   background: var(--modal-bg-color);
   border-radius: 8px;
   overflow: hidden;
+
+  pointer-events: auto;
+  z-index: 10;
 }
 
 /* =========================================================
@@ -110,6 +114,7 @@
 
 /* =========================================================
    MODAL SIDE ACTION BUTTONS (PDF / PNG / PRINT)
+   Кнопки не участвуют в центрировании
 ========================================================= */
 
 .modal-actions {
@@ -117,18 +122,21 @@
   flex-direction: column;
   gap: 8px;
 
-  margin-left: 8px;
-  z-index: 20;
-}
+  margin-left: 0;
+  margin-right: -10px;
+  margin-top: 20px;
 
-.modal__content,
-.modal-actions {
+  z-index: 5;
   pointer-events: auto;
 }
 
+/* =========================================================
+   MODAL ACTION BUTTON
+========================================================= */
+
 .modal-action-btn {
-  width: 48px;
   height: 32px;
+  padding: 0 10px;
 
   font-size: 11px;
   font-weight: 600;
@@ -143,14 +151,18 @@
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+
+  /* default: утоплена влево */
+  transform: translateX(-8px);
+  transition: transform 160ms ease;
 }
 
 .modal-action-btn:hover {
-  opacity: 0.9;
+  transform: translateX(4px);
 }
 
 .modal-action-btn:active {
-  transform: translateY(1px);
+  transform: translateX(4px) translateY(1px);
 }
 
 .modal-action-btn:focus-visible {
@@ -205,46 +217,6 @@
   margin-left: 2px;
 }
 
-/* ---------- LOGO (OUT OF GRID) ---------- */
-
-.modal-scale-head .main-logo {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  color: var(--logo-color);
-  text-decoration: none;
-
-  pointer-events: none;
-
-  font-size: 14px;
-  line-height: 1;
-}
-
-.modal-scale-head .main-logo img {
-  height: 24px;
-  width: auto;
-  display: block;
-}
-
-.modal-scale-head .main-logo-text {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--logo-color);
-}
-
-.modal-scale-head .main-logo-text::after {
-  content: "™";
-  font-size: 0.7em;
-  vertical-align: super;
-  margin-left: 2px;
-}
-
 /* ---------- GRID: DATA ONLY ---------- */
 
 .scale-head-grid {
@@ -252,12 +224,10 @@
   width: 100%;
   display: grid;
   grid-template-rows: auto auto;
-
-  /* отступ в шапке модалки*/
   row-gap: 20px;
 }
 
-/* ---------- ROW 1: LOW / AVERAGE / HIGH ---------- */
+/* ---------- ROW 1 ---------- */
 
 .scale-head-levels {
   display: grid;
@@ -270,14 +240,14 @@
   color: var(--main-red-color);
 }
 
-.scale-head-levels>.level {
+.scale-head-levels > .level {
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ---------- ROW 2: 0 / 33 / 66 / 100 ---------- */
+/* ---------- ROW 2 ---------- */
 
 .scale-head-values {
   position: relative;
@@ -300,17 +270,9 @@
   transform: none;
 }
 
-.scale-head-values .v33 {
-  left: 33%;
-}
-
-.scale-head-values .v66 {
-  left: 66%;
-}
-
-.scale-head-values .v100 {
-  left: 100%;
-}
+.scale-head-values .v33 { left: 33%; }
+.scale-head-values .v66 { left: 66%; }
+.scale-head-values .v100 { left: 100%; }
 
 /* =========================================================
    RESULTS
@@ -341,18 +303,6 @@
 .result-value {
   font-weight: 600;
   color: var(--primary-blue);
-}
-
-.result-scale .chart-wrapper {
-  width: 100%;
-}
-
-.result-scale .chart-track {
-  position: relative;
-}
-
-.result-scale .chart-marker {
-  z-index: 10;
 }
 
 /* =========================================================
