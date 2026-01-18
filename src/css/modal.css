@@ -4,7 +4,8 @@
 ========================================================= */
 
 .modal {
-  position: fixed; /* НЕ ТРОГАЕМ */
+  position: fixed;
+  /* НЕ ТРОГАЕМ */
   inset: 0;
   z-index: 9999;
   display: none;
@@ -19,6 +20,18 @@
   position: absolute;
   inset: 0;
   background: var(--modal-overlay-color);
+  z-index: 1;
+}
+
+/* =========================================================
+   MODAL WRAP (CONTENT + SIDE ACTIONS)
+========================================================= */
+
+.modal__wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
 }
 
 /* =========================================================
@@ -26,12 +39,13 @@
 ========================================================= */
 
 .modal__content {
-  position: relative; /* ЯКОРЬ ДЛЯ КНОПОК */
+  position: relative;
+  /* якорь для close-кнопки */
   display: flex;
   flex-direction: column;
 
   width: calc(100% - 32px);
-  max-width: 1320px;
+  max-width: 1200px;
   max-height: 92vh;
 
   margin: 5vh auto;
@@ -42,7 +56,7 @@
 }
 
 /* =========================================================
-   MODAL CLOSE + PDF BUTTONS (TOP RIGHT)
+   MODAL CLOSE BUTTON
 ========================================================= */
 
 .modal-close-btn {
@@ -77,24 +91,41 @@
   transform: scale(0.96);
 }
 
-/* ---------- PDF BUTTON (TEMPORARY PLACEMENT) ---------- */
+/* =========================================================
+   MODAL BODY
+========================================================= */
 
-.modal-controls {
+.modal__body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* ⬅⬅ уменьшены поля, чтобы справа влезли кнопки */
+  padding: 20px 64px;
+}
+
+/* =========================================================
+   MODAL SIDE ACTION BUTTONS (PDF / PNG / PRINT)
+========================================================= */
+
+.modal-actions {
   position: absolute;
-  top: 12px;
-  right: 56px; /* слева от крестика */
+  top: 88px;
+  right: -56px;
 
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+
   z-index: 20;
 }
 
-.modal-controls button[data-export-pdf] {
+.modal-action-btn {
+  width: 48px;
   height: 32px;
-  padding: 0 12px;
 
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   line-height: 1;
 
   color: #fff;
@@ -108,24 +139,17 @@
   white-space: nowrap;
 }
 
-.modal-controls button[data-export-pdf]:hover {
+.modal-action-btn:hover {
   opacity: 0.9;
 }
 
-.modal-controls button[data-export-pdf]:active {
+.modal-action-btn:active {
   transform: translateY(1px);
 }
 
-/* =========================================================
-   MODAL BODY
-========================================================= */
-
-.modal__body {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  padding: 20px 120px;
+.modal-action-btn:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
 }
 
 /* =========================================================
@@ -164,7 +188,7 @@
   color: var(--main-red-color);
 }
 
-.scale-head-levels > .level {
+.scale-head-levels>.level {
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -224,7 +248,6 @@
   white-space: nowrap;
 }
 
-/* edges */
 .scale-head-values .v0 {
   left: 0%;
   transform: none;
@@ -301,7 +324,6 @@
 ========================================================= */
 
 @media (max-width: 1024px) {
-
   .modal__body {
     padding-left: 48px;
     padding-right: 48px;
@@ -314,6 +336,10 @@
   .scale-head-values {
     font-size: 12px;
   }
+
+  .modal-actions {
+    right: -48px;
+  }
 }
 
 /* =========================================================
@@ -321,7 +347,6 @@
 ========================================================= */
 
 @media (max-width: 640px) {
-
   .modal__body {
     padding-left: 20px;
     padding-right: 20px;
@@ -330,5 +355,11 @@
   .modal__content {
     width: calc(100% - 16px);
     margin: 3vh auto;
+  }
+
+  /* модалка всё равно не используется при ≤640,
+     но на всякий случай */
+  .modal-actions {
+    display: none;
   }
 }

@@ -39,17 +39,23 @@ function createModal() {
   modal.innerHTML = `
     <div class="modal__overlay" data-close-modal></div>
 
-    <div class="modal__content" role="dialog" aria-modal="true">
-      <button
-        class="modal-close-btn"
-        type="button"
-        aria-label="Close results"
-        data-close-modal
-      >
-        ×
-      </button>
+    <div class="modal__wrap">
+      <div class="modal__content" role="dialog" aria-modal="true">
+        <button
+          class="modal-close-btn"
+          type="button"
+          aria-label="Close results"
+          data-close-modal
+        >×</button>
 
-      <section class="modal__body"></section>
+        <section class="modal__body"></section>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-action-btn" data-action="pdf">PDF</button>
+        <button class="modal-action-btn" data-action="png">PNG</button>
+        <button class="modal-action-btn" data-action="print">PRINT</button>
+      </div>
     </div>
   `;
 
@@ -63,45 +69,46 @@ function createModal() {
    OPEN / CLOSE
 ========================================================= */
 
-export function openModal(contentNode) {
-  if (!contentNode) return;
+export function openModal() {
   if (!isModalAllowed()) return;
 
-  // 🔑 сохраняем элемент, который имел фокус
   lastFocusedElement = document.activeElement;
+
+  const result = renderModalResults();
+  if (!result) return;
 
   const modal = createModal();
   const body = modal.querySelector(".modal__body");
 
   body.innerHTML = "";
-  body.appendChild(contentNode);
+  body.appendChild(result.content);
 
   modal.classList.add("is-open");
   modal.setAttribute("aria-hidden", "false");
 
   document.body.style.overflow = "hidden";
 
-  // переводим фокус в модалку (на кнопку закрытия)
-  const closeBtn = modal.querySelector(".modal-close-btn");
-  closeBtn?.focus();
+  modal.querySelector(".modal-close-btn")?.focus();
+
+  // actions
+  modal.querySelector('[data-action="pdf"]').onclick = result.exportPDF;
+  modal.querySelector('[data-action="png"]').onclick = () =>
+    console.warn("PNG export — TODO");
+  modal.querySelector('[data-action="print"]').onclick = () =>
+    window.print();
 }
 
 export function closeModal() {
   if (!isModalOpen()) return;
 
-  // 🔑 СНАЧАЛА уводим фокус ИЗ модалки
-  if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+  if (lastFocusedElement?.focus) {
     lastFocusedElement.focus();
-  } else {
-    document.body.focus();
   }
 
   modalRoot.classList.remove("is-open");
   modalRoot.setAttribute("aria-hidden", "true");
 
-  const body = modalRoot.querySelector(".modal__body");
-  if (body) body.innerHTML = "";
-
+  modalRoot.querySelector(".modal__body").innerHTML = "";
   document.body.style.overflow = "";
 }
 
@@ -109,37 +116,22 @@ export function closeModal() {
    GLOBAL EVENTS
 ========================================================= */
 
-/* Open / Close by click */
 document.addEventListener("click", (e) => {
-  const openBtn = e.target.closest("[data-open-modal]");
-  const closeBtn = e.target.closest("[data-close-modal]");
-
-  if (openBtn) {
-    if (!isModalAllowed()) return;
-
-    const resultsNode = renderModalResults();
-    if (!resultsNode) return;
-
-    openModal(resultsNode);
+  if (e.target.closest("[data-open-modal]")) {
+    openModal();
     return;
   }
 
-  if (closeBtn) {
+  if (e.target.closest("[data-close-modal]")) {
     closeModal();
   }
 });
 
-/* Close on ESC */
 document.addEventListener("keydown", (e) => {
-  if (e.key !== "Escape") return;
-  if (!isModalOpen()) return;
-
-  closeModal();
+  if (e.key === "Escape" && isModalOpen()) {
+    closeModal();
+  }
 });
-
-/* =========================================================
-   SAFETY: RESIZE
-========================================================= */
 
 window.addEventListener("resize", () => {
   if (!isModalAllowed() && isModalOpen()) {

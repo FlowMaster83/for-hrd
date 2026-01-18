@@ -1,13 +1,15 @@
+// src/js/controls/createHeaderControls.js
+
 import { createThemeToggleButton } from "../theme/themeButton.js";
 import { resetAllScales } from "../state/scaleRegistry.js";
 
 const MAX = 100;
 const STEP = 1;
-const isMobile = window.matchMedia("(max-width: 640px)").matches;
+const MODAL_MIN_WIDTH = 641;
 
-/* -----------------------------
-   NORMALIZE VALUE
------------------------------ */
+function isModalAllowed() {
+  return window.innerWidth >= MODAL_MIN_WIDTH;
+}
 
 function normalizeValue(raw) {
   if (raw === "") return null;
@@ -19,10 +21,6 @@ function normalizeValue(raw) {
   return Math.min(value, MAX);
 }
 
-/* -----------------------------
-   APPLY TO ALL SCALES
------------------------------ */
-
 function applyValueToAllScales(value) {
   document.querySelectorAll(".scale-row").forEach((row) => {
     const input = row.querySelector(".user-input");
@@ -32,10 +30,6 @@ function applyValueToAllScales(value) {
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
 }
-
-/* =========================================================
-   CREATE HEADER CONTROLS
-========================================================= */
 
 export function createHeaderControls(rootId) {
   const root = document.getElementById(rootId);
@@ -60,11 +54,11 @@ export function createHeaderControls(rootId) {
   input.inputMode = "numeric";
   input.placeholder = "0";
 
-  /* RESULT BUTTON (DESKTOP ONLY) */
+  /* RESULT BUTTON (DESKTOP / TABLET ONLY) */
 
   let resultBtn = null;
 
-  if (!isMobile) {
+  if (isModalAllowed()) {
     resultBtn = document.createElement("button");
     resultBtn.className = "header-result-btn";
     resultBtn.type = "button";

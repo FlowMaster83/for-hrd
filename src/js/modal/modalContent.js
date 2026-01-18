@@ -9,43 +9,22 @@ export function renderModalResults() {
   const root = document.createElement("div");
   root.className = "modal-results";
 
-  /* =========================================================
-     CONTENT (то, что идёт в PDF)
-  ========================================================= */
-
   const content = document.createElement("div");
   content.className = "results";
   content.dataset.modalResults = "";
 
   content.appendChild(renderModalScaleHeader());
 
-  const scaleRows = document.querySelectorAll(".scale-row");
-  scaleRows.forEach((row) => {
+  document.querySelectorAll(".scale-row").forEach((row) => {
     content.appendChild(renderResultRow(row));
   });
 
-  /* =========================================================
-     CONTROLS (не попадают в PDF)
-  ========================================================= */
-
-  const controls = document.createElement("div");
-  controls.className = "modal-controls";
-
-  const pdfButton = document.createElement("button");
-  pdfButton.type = "button";
-  pdfButton.dataset.exportPdf = "";
-  pdfButton.textContent = "PDF";
-
-  pdfButton.addEventListener("click", exportResultsToPDF);
-
-  controls.appendChild(pdfButton);
-
-  /* ========================================================= */
-
   root.appendChild(content);
-  root.appendChild(controls);
 
-  return root;
+  return {
+    content: root,
+    exportPDF: exportResultsToPDF,
+  };
 }
 
 function renderModalScaleHeader() {
@@ -54,7 +33,6 @@ function renderModalScaleHeader() {
 
   header.innerHTML = `
     <div class="scale-head-grid">
-      <!-- ROW 1 -->
       <div></div>
       <div class="scale-head-levels">
         <span class="level low">LOW</span>
@@ -62,14 +40,12 @@ function renderModalScaleHeader() {
         <span class="level high">HIGH</span>
       </div>
 
-      <!-- ROW 2 -->
       <a class="main-logo">
         <img src="./svg/logo.svg" alt="Logo" />
         <span class="main-logo-text">HIREBOX</span>
       </a>
       <div></div>
 
-      <!-- ROW 3 -->
       <div></div>
       <div class="scale-head-values">
         <span class="value v0">0%</span>
@@ -87,14 +63,12 @@ function renderResultRow(rowSource) {
   const row = document.createElement("div");
   row.className = "result-row";
 
-  const labelEl = rowSource.querySelector(".scale-label");
-  const valueEl = rowSource.querySelector(".percent-value");
-  const fillEl = rowSource.querySelector(".chart-fill");
-  const trackEl = rowSource.querySelector(".chart-track");
-
-  const title = labelEl?.textContent ?? "";
-  const value = valueEl?.textContent ?? "0";
-  const fillWidth = fillEl?.style.width ?? "0%";
+  const title =
+    rowSource.querySelector(".scale-label")?.textContent ?? "";
+  const value =
+    rowSource.querySelector(".percent-value")?.textContent ?? "0";
+  const fillWidth =
+    rowSource.querySelector(".chart-fill")?.style.width ?? "0%";
 
   row.innerHTML = `
     <div class="result-label">
@@ -105,19 +79,16 @@ function renderResultRow(rowSource) {
     <div class="result-scale">
       <div class="chart-wrapper">
         <div class="chart-track">
-          <div class="chart-fill" style="width: ${fillWidth}"></div>
+          <div class="chart-fill" style="width:${fillWidth}"></div>
         </div>
       </div>
     </div>
   `;
 
   const targetTrack = row.querySelector(".chart-track");
-
-  trackEl
-    ?.querySelectorAll(".chart-marker.active")
-    .forEach((marker) => {
-      targetTrack.appendChild(marker.cloneNode(true));
-    });
+  rowSource
+    .querySelectorAll(".chart-marker.active")
+    .forEach((m) => targetTrack.appendChild(m.cloneNode(true)));
 
   return row;
 }
