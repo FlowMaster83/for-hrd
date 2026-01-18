@@ -42,7 +42,7 @@
 }
 
 /* =========================================================
-   481–640px — mobile WITHOUT arrows (MORE SPACE)
+   481–640px — mobile WITHOUT arrows
 ========================================================= */
 
 @media (max-width: 640px) and (min-width: 481px) {
@@ -55,7 +55,7 @@
     row-gap: 8px;
   }
 
-  /* 🔑 увеличенный отступ между шкалой и кнопками */
+  /* увеличенный отступ между шкалой и кнопками */
   .scale-row .value {
     margin-bottom: 16px;
   }
@@ -92,11 +92,11 @@
 }
 
 /* =========================================================
-   ≤ 480px — MOBILE (COMPACT, ALL BUTTONS SAME HEIGHT)
+   ≤ 480px — MOBILE (BOTTOM HEADER, CLEAN HEADER TEXT)
 ========================================================= */
 
 @media (max-width: 480px) {
-  /* ---------- HEADER BOTTOM ---------- */
+  /* ---------- HEADER ---------- */
 
   .header {
     position: fixed;
@@ -107,6 +107,11 @@
     height: var(--header-height);
     padding-bottom: env(safe-area-inset-bottom);
     z-index: 100;
+  }
+
+  /* 🔑 убираем "Fill all:" */
+  .header-label {
+    display: none;
   }
 
   /* ---------- MAIN OFFSET ---------- */
@@ -168,7 +173,7 @@
     height: 100%;
   }
 
-  /* ---------- CLEAR (WIDER) ---------- */
+  /* ---------- CLEAR ---------- */
 
   .scale-row .clear-btn {
     grid-column: span 2;
