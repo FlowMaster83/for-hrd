@@ -42,7 +42,7 @@
 }
 
 /* =========================================================
-   481–640px — mobile WITHOUT arrows
+   481–640px — mobile WITHOUT arrows (MORE SPACE)
 ========================================================= */
 
 @media (max-width: 640px) and (min-width: 481px) {
@@ -53,6 +53,11 @@
       "value"
       "actions";
     row-gap: 8px;
+  }
+
+  /* 🔑 увеличенный отступ между шкалой и кнопками */
+  .scale-row .value {
+    margin-bottom: 16px;
   }
 
   .scale-row .actions {
@@ -163,14 +168,14 @@
     height: 100%;
   }
 
-  /* ---------- CLEAR (WIDER, SAME HEIGHT) ---------- */
+  /* ---------- CLEAR (WIDER) ---------- */
 
   .scale-row .clear-btn {
     grid-column: span 2;
     font-size: 13px;
   }
 
-  /* ---------- ARROWS (SAME HEIGHT) ---------- */
+  /* ---------- ARROWS ---------- */
 
   .scale-row .arrow-btn {
     grid-column: span 1;
