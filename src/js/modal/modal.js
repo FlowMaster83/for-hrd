@@ -23,7 +23,7 @@ function isModalAllowed() {
 }
 
 function isModalOpen() {
-  return modalRoot && modalRoot.classList.contains("is-open");
+  return modalRoot?.classList.contains("is-open");
 }
 
 /* =========================================================
@@ -91,9 +91,11 @@ export function openModal() {
 
   modal.querySelector(".modal-close-btn")?.focus();
 
-  // actions
-  modal.querySelector('[data-action="pdf"]').onclick = () => console.log("PDF");
-  modal.querySelector('[data-action="png"]').onclick = () => console.log("PNG");
+  // actions — заглушки (pre-A4)
+  modal.querySelector('[data-action="pdf"]').onclick = () =>
+    console.log("PDF");
+  modal.querySelector('[data-action="png"]').onclick = () =>
+    console.log("PNG");
   modal.querySelector('[data-action="print"]').onclick = () =>
     console.log("PRINT");
 }
@@ -101,15 +103,16 @@ export function openModal() {
 export function closeModal() {
   if (!isModalOpen()) return;
 
-  if (lastFocusedElement?.focus) {
-    lastFocusedElement.focus();
-  }
-
   modalRoot.classList.remove("is-open");
   modalRoot.setAttribute("aria-hidden", "true");
 
   modalRoot.querySelector(".modal__body").innerHTML = "";
   document.body.style.overflow = "";
+
+  // возвращаем фокус ПОСЛЕ закрытия
+  if (lastFocusedElement?.focus) {
+    lastFocusedElement.focus();
+  }
 }
 
 /* =========================================================
@@ -133,6 +136,10 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+/**
+ * ≤640px — модалки не существует
+ * Закрываем её ЛОГИЧЕСКИ, а не только визуально
+ */
 window.addEventListener("resize", () => {
   if (!isModalAllowed() && isModalOpen()) {
     closeModal();
