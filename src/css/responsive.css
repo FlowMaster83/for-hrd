@@ -87,10 +87,34 @@
 }
 
 /* =========================================================
-   ≤ 480px — MOBILE WITH ARROWS + SHORT LABELS
+   ≤ 480px — MOBILE (BOTTOM HEADER, NO TOP GAP)
 ========================================================= */
 
 @media (max-width: 480px) {
+  /* ---------- HEADER GOES BOTTOM ---------- */
+
+  .header {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 100;
+  }
+
+  /* ---------- REMOVE TOP GAP ---------- */
+
+  main {
+    padding-top: 8px;                 /* 🔑 ключевой фикс */
+    padding-bottom: calc(
+      var(--header-height) + env(safe-area-inset-bottom)
+    );
+  }
+
+  /* ---------- SCALE LAYOUT ---------- */
+
   .scale-row {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -110,14 +134,12 @@
     gap: 6px;
   }
 
-  /* ---------- MARKERS: USE data-short ---------- */
+  /* ---------- MARKERS: SHORT LABELS ---------- */
 
   .scale-row .actions button[data-marker] {
     position: relative;
     grid-column: span 1;
     height: 44px;
-
-    /* hide original text */
     font-size: 0;
   }
 
@@ -135,7 +157,7 @@
     height: 100%;
   }
 
-  /* ---------- CLEAR — WIDER, TEXT UNCHANGED ---------- */
+  /* ---------- CLEAR (WIDER) ---------- */
 
   .scale-row .clear-btn {
     grid-column: span 2;
@@ -171,7 +193,7 @@
 }
 
 /* =========================================================
-   ≤ 512px — header size
+   ≤ 512px — header height variable
 ========================================================= */
 
 @media (max-width: 512px) {
@@ -181,7 +203,7 @@
 }
 
 /* =========================================================
-   ≤ 440px
+   ≤ 440px — logo
 ========================================================= */
 
 @media (max-width: 440px) {
