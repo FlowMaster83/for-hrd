@@ -53,7 +53,7 @@
   flex-direction: column;
 
   width: 100%;
-  max-width: 1200px;
+  max-width: calc(100% - 120px);
   max-height: 92vh;
 
   background: var(--modal-bg-color);
