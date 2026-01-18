@@ -1,4 +1,3 @@
-// createScaleRow.js
 import { createMarker } from "../components/markers.js";
 import { registerScale } from "../state/scaleRegistry.js";
 import { useArrowHold } from "../arrows/useArrowHold.js";
@@ -40,7 +39,7 @@ export function createScaleRow(labelTitle, container) {
       <button data-marker="star" data-label="STAR" data-short="S">STAR</button>
       <button data-marker="check" data-label="CHECK" data-short="✓">CHECK</button>
       <button class="clear-btn" type="button">CLEAR</button>
-      
+
       <button class="arrow-btn arrow-left" type="button">←</button>
       <button class="arrow-btn arrow-right" type="button">→</button>
     </div>
@@ -78,6 +77,7 @@ export function createScaleRow(labelTitle, container) {
   const layoutLines = () => {
     const width = track.clientWidth;
     if (!width) return;
+
     const stepPx = width / (MAX / STEP_TICK);
     lineNodes.forEach(({ value, el }) => {
       el.style.left = `${Math.round((value / STEP_TICK) * stepPx)}px`;
@@ -115,18 +115,41 @@ export function createScaleRow(labelTitle, container) {
 
   const setValue = (v) => {
     const val = normalize(v);
+
     input.value = val === 0 ? "" : val;
     fill.style.width = `${val}%`;
     percentLabel.textContent = val;
 
     Object.entries(markers).forEach(([type, m]) => {
       if (m.classList.contains("active")) {
-        m.style.left = type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
+        m.style.left =
+          type === "check" ? `calc(${val}% + 8px)` : `${val}%`;
       }
     });
   };
 
-  input.addEventListener("input", () => setValue(input.value));
+  /* IMPORTANT:
+     Native wheel behavior on input[type="number"] is disabled.
+     All value changes MUST go through setValue()
+     to keep scale, percent and markers in sync.
+  */
+
+  input.addEventListener("input", () => {
+    setValue(input.value);
+  });
+
+  input.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+
+      const delta = Math.sign(e.deltaY);
+      if (!delta) return;
+
+      setValue(getValue() - delta * STEP_INPUT);
+    },
+    { passive: false }
+  );
 
   /* ---------- ARROWS ---------- */
 
@@ -167,10 +190,12 @@ export function createScaleRow(labelTitle, container) {
 
   const resetScale = () => {
     setValue(0);
+
     Object.values(markers).forEach((m) => {
       m.classList.remove("active");
       m.style.left = "";
     });
+
     Object.values(buttons).forEach((b) =>
       b.classList.remove("marker-active")
     );
