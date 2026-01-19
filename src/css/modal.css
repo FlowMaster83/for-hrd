@@ -176,7 +176,7 @@
 
 .modal-scale-head {
   position: relative;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 
   display: grid;
   grid-template-columns: 200px 1fr;
@@ -224,7 +224,7 @@
   width: 100%;
   display: grid;
   grid-template-rows: auto auto;
-  row-gap: 20px;
+  row-gap: 5px;
 }
 
 /* ---------- ROW 1 ---------- */
