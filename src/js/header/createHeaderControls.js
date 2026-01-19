@@ -15,22 +15,19 @@ function isModalAllowed() {
   return window.innerWidth >= MODAL_MIN_WIDTH;
 }
 
-/**
- * RESULT:
- * – disabled ТОЛЬКО при ≤640
- * – всегда enabled при >640
- */
-function updateResultButtonState(button) {
-  if (!button) return;
+function setResultState(button, state) {
+  // state: "normal" | "active" | "disabled"
+  button.classList.remove("is-active");
+  button.disabled = false;
+  button.setAttribute("aria-disabled", "false");
 
-  const enabled = isModalAllowed();
+  if (state === "active") {
+    button.classList.add("is-active");
+  }
 
-  button.disabled = !enabled;
-  button.setAttribute("aria-disabled", String(!enabled));
-
-  // сбрасываем залипший focus / active при resize
-  if (!enabled && document.activeElement === button) {
-    button.blur();
+  if (state === "disabled") {
+    button.disabled = true;
+    button.setAttribute("aria-disabled", "true");
   }
 }
 
@@ -67,13 +64,9 @@ export function createHeaderControls(rootId) {
   const wrapper = document.createElement("div");
   wrapper.className = "header-options";
 
-  /* LABEL */
-
   const label = document.createElement("p");
   label.className = "header-label";
   label.textContent = "Fill all:";
-
-  /* MASTER INPUT */
 
   const input = document.createElement("input");
   input.className = "user-input";
@@ -81,35 +74,58 @@ export function createHeaderControls(rootId) {
   input.inputMode = "numeric";
   input.placeholder = "0";
 
-  /* RESULT BUTTON */
-
   const resultBtn = document.createElement("button");
   resultBtn.className = "header-result-btn";
   resultBtn.type = "button";
   resultBtn.textContent = "RESULT";
   resultBtn.dataset.openModal = "true";
 
-  updateResultButtonState(resultBtn);
-
-  /* CLEAR ALL */
-
   const clearBtn = document.createElement("button");
   clearBtn.className = "clear-all-btn";
   clearBtn.type = "button";
   clearBtn.textContent = "CLEAR ALL";
-
-  /* LANGUAGE */
 
   const langBtn = document.createElement("button");
   langBtn.className = "lang-toggle-btn button";
   langBtn.type = "button";
   langBtn.textContent = "UA";
 
-  /* THEME */
-
   const themeContainer = document.createElement("div");
   themeContainer.className = "theme-toggle";
   createThemeToggleButton(themeContainer);
+
+  /* INITIAL STATE */
+
+  if (isModalAllowed()) {
+    setResultState(resultBtn, "normal");
+  } else {
+    setResultState(resultBtn, "disabled");
+  }
+
+  /* MODAL EVENTS */
+
+  document.addEventListener("modal:open", () => {
+    setResultState(resultBtn, "active");
+  });
+
+  document.addEventListener("modal:close", () => {
+    if (!isModalAllowed()) {
+      setResultState(resultBtn, "disabled");
+    } else {
+      setResultState(resultBtn, "normal");
+    }
+  });
+
+  /* RESIZE */
+
+  window.addEventListener("resize", () => {
+    if (!isModalAllowed()) {
+      setResultState(resultBtn, "disabled");
+    } else {
+      // при возврате >640 — всегда normal
+      setResultState(resultBtn, "normal");
+    }
+  });
 
   /* INPUT HANDLERS */
 
@@ -147,14 +163,10 @@ export function createHeaderControls(rootId) {
     { passive: false }
   );
 
-  /* CLEAR ALL */
-
   clearBtn.addEventListener("click", () => {
     resetAllScales();
     input.value = "";
   });
-
-  /* APPEND */
 
   wrapper.append(
     label,
@@ -167,16 +179,5 @@ export function createHeaderControls(rootId) {
 
   root.appendChild(wrapper);
 
-  /* RESIZE SYNC */
-
-  window.addEventListener("resize", () => {
-    updateResultButtonState(resultBtn);
-  });
-
-  return {
-    input,
-    clearBtn,
-    resultBtn,
-    langBtn,
-  };
+  return { input, clearBtn, resultBtn, langBtn };
 }
