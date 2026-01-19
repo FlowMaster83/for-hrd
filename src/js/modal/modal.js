@@ -91,7 +91,6 @@ export function closeModal() {
   document.dispatchEvent(new Event("modal:close"));
 }
 
-
 /* GLOBAL EVENTS */
 
 document.addEventListener("click", (e) => {
