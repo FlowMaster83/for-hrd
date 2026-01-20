@@ -217,11 +217,15 @@
 
 @media (max-width: 480px) {
   .main-logo-text {
-    display: none;
+    font-size: 10px;
   }
 }
 
 @media (max-width: 440px) {
+  main {
+    padding-top: 30px;
+  }
+
   .header-options {
     width: 100%;
     justify-content: stretch;
@@ -233,6 +237,29 @@
   }
 
   .main-logo {
+    position: fixed;
+    top: 14px;
+    left: 90%;
+    transform: translateX(-50%);
+
+    height: auto;
+    z-index: 1000;
+
+    opacity: 0.5;
+
+    /* визуальная стабильность */
+    background: transparent;
+
+    /* логотип не должен мешать кликам по контенту */
+    pointer-events: none;
+  }
+
+  /* внутри хедера он больше не участвует в флекс-раскладке */
+  .header .main-logo {
+    position: fixed;
+  }
+
+  .main-logo-text {
     display: none;
   }
 }
