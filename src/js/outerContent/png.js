@@ -89,6 +89,11 @@ export function exportResultsToPngMobile() {
     clone.setAttribute("data-theme", theme);
   }
 
+  const computed = getComputedStyle(document.body);
+  clone.style.background = computed.backgroundColor;
+  clone.style.color = computed.color;
+  clone.style.padding = "12px"; // чтобы не прилипало к краю
+
   // --- REMOVE UI CONTROLS FROM EACH SCALE ---
   clone.querySelectorAll(".actions").forEach((el) => el.remove());
   clone.querySelectorAll(".user-input").forEach((el) => el.remove());
@@ -97,14 +102,19 @@ export function exportResultsToPngMobile() {
   clone.querySelectorAll(".tick, .tick-line").forEach((el) => el.remove());
 
   clone.querySelectorAll(".scale-row").forEach((row) => {
-    row.style.margin = "0";
+    row.style.marginBottom = "0";
     row.style.rowGap = "0";
+  });
+
+  clone.querySelectorAll(".scale-row .value").forEach((el) => {
+    el.style.marginBottom = "0";
+    el.style.paddingBottom = "0";
   });
 
   // --- FIXED VERTICAL RHYTHM FOR DOCUMENT ---
   clone.style.display = "flex";
   clone.style.flexDirection = "column";
-  clone.style.gap = "10px";
+  clone.style.gap = "8px";
 
   // --- REMOVE HEIGHT / SCROLL LIMITS ---
   clone.style.maxHeight = "none";
