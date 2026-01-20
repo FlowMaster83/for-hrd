@@ -1,0 +1,60 @@
+@media print {
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        filter: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        color: #000;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .header,
+    .modal__overlay,
+    .modal-actions,
+    button {
+        display: none !important;
+    }
+
+    .modal {
+        position: static;
+    }
+
+    .modal__content {
+        box-shadow: none;
+        border: none;
+    }
+
+    .modal__body {
+        display: block;
+    }
+
+    .chart-track {
+        background: #000;
+        height: 2px;
+    }
+
+    .tick,
+    .tick--major {
+        color: #000;
+        font-weight: 600;
+    }
+
+    .chart-marker {
+        color: #000;
+        opacity: 1;
+    }
+
+    .scale-label {
+        font-weight: 700;
+    }
+}

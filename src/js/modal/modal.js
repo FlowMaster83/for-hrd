@@ -1,6 +1,7 @@
 // src/js/modal/modal.js
 import { renderModalResults } from "./modalContent.js";
 import { exportResultsToPng } from "../outerContent/png.js";
+import { printResults } from "../outerContent/print.js";
 
 /* =========================================================
    CONFIG
@@ -64,11 +65,23 @@ function createModal() {
     </div>
   `;
 
+  /* PNG */
+
   const pngButton = modal.querySelector('[data-action="png"]');
 
   if (pngButton) {
     pngButton.addEventListener("click", () => {
       exportResultsToPng();
+    });
+  }
+
+  /* PRINT */
+
+  const printButton = modal.querySelector('[data-action="print"]');
+
+  if (printButton) {
+    printButton.addEventListener("click", () => {
+      printResults();
     });
   }
 
