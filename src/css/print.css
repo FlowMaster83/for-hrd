@@ -1,3 +1,4 @@
+/* print.css */
 @media print {
     * {
         box-shadow: none !important;
@@ -6,6 +7,13 @@
     }
 
     body {
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        width: auto !important;
+        overflow: visible !important;
+
         font-size: 12pt;
         line-height: 1.4;
 
@@ -25,8 +33,14 @@
         display: none !important;
     }
 
-    .modal {
-        position: static;
+    .modal,
+    .modal__wrap,
+    .modal__content {
+        position: static !important;
+        inset: auto !important;
+        width: auto !important;
+        max-width: none !important;
+        height: auto !important;
     }
 
     .modal__content {
@@ -56,5 +70,24 @@
 
     .scale-label {
         font-weight: 700;
+    }
+
+    .scale-row {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .scale-group,
+    .scale-section {
+        break-inside: avoid;
+    }
+
+    input,
+    select,
+    textarea,
+    .scale-input,
+    .scale-value,
+    .value {
+        display: none !important;
     }
 }
