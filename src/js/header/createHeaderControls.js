@@ -3,6 +3,7 @@
 import { createThemeToggleButton } from "../theme/themeButton.js";
 import { resetAllScales } from "../state/scaleRegistry.js";
 import { modalAutoClosed } from "../modal/modal.js";
+import { exportResultsToPngMobile } from "../outerContent/png.js";
 
 const MAX = 100;
 const STEP = 1;
@@ -16,6 +17,10 @@ function isModalAllowed() {
   return window.innerWidth >= MODAL_MIN_WIDTH;
 }
 
+function isMobilePngAllowed() {
+  return window.innerWidth < MODAL_MIN_WIDTH;
+}
+
 /**
  * RESULT включён только если:
  * – позволяет брейкпоинт
@@ -24,7 +29,7 @@ function isModalAllowed() {
 function updateResultButtonState(button) {
   if (!button) return;
 
-  const enabled = isModalAllowed();
+  const enabled = isModalAllowed() && !modalAutoClosed;
 
   button.disabled = !enabled;
 
@@ -32,6 +37,16 @@ function updateResultButtonState(button) {
     button.removeAttribute("aria-disabled");
   } else {
     button.setAttribute("aria-disabled", "true");
+  }
+}
+
+function updatePngButtonState(button) {
+  if (!button) return;
+
+  if (isMobilePngAllowed()) {
+    button.style.display = "";
+  } else {
+    button.style.display = "none";
   }
 }
 
@@ -82,7 +97,7 @@ export function createHeaderControls(rootId) {
   input.inputMode = "numeric";
   input.placeholder = "0";
 
-  /* RESULT BUTTON */
+  /* RESULT BUTTON (≥641) */
 
   const resultBtn = document.createElement("button");
   resultBtn.className = "header-result-btn";
@@ -91,6 +106,19 @@ export function createHeaderControls(rootId) {
   resultBtn.dataset.openModal = "true";
 
   updateResultButtonState(resultBtn);
+
+  /* PNG BUTTON (≤640) */
+
+  const pngBtn = document.createElement("button");
+  pngBtn.className = "header-png-btn";
+  pngBtn.type = "button";
+  pngBtn.textContent = "PNG";
+
+  pngBtn.addEventListener("click", () => {
+    exportResultsToPngMobile();
+  });
+
+  updatePngButtonState(pngBtn);
 
   /* CLEAR ALL */
 
@@ -155,12 +183,13 @@ export function createHeaderControls(rootId) {
     input.value = "";
   });
 
-  /* APPEND */
+  /* APPEND ORDER (CRITICAL) */
 
   wrapper.append(
     label,
     input,
-    resultBtn,
+    resultBtn, // ≥641
+    pngBtn,    // ≤640
     clearBtn,
     langBtn,
     themeContainer
@@ -172,12 +201,14 @@ export function createHeaderControls(rootId) {
 
   window.addEventListener("resize", () => {
     updateResultButtonState(resultBtn);
+    updatePngButtonState(pngBtn);
   });
 
   return {
     input,
     clearBtn,
     resultBtn,
+    pngBtn,
     langBtn,
   };
 }
