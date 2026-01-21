@@ -3,7 +3,7 @@
 import { createThemeToggleButton } from "../theme/themeButton.js";
 import { resetAllScales } from "../state/scaleRegistry.js";
 import { modalAutoClosed } from "../modal/modal.js";
-import { exportResultsToPngMobile } from "../outerContent/png.js";
+import { exportResultsToPng } from "../outerContent/png.js";
 
 const MAX = 100;
 const STEP = 1;
@@ -112,10 +112,10 @@ export function createHeaderControls(rootId) {
   const pngBtn = document.createElement("button");
   pngBtn.className = "header-png-btn";
   pngBtn.type = "button";
-  pngBtn.textContent = "PNG";
+  pngBtn.textContent = "SCREEN";
 
   pngBtn.addEventListener("click", () => {
-    exportResultsToPngMobile();
+    exportResultsToPng();
   });
 
   updatePngButtonState(pngBtn);

@@ -107,6 +107,12 @@
    ≤ 480px — MOBILE (BOTTOM HEADER, CLEAN HEADER TEXT)
 ========================================================= */
 
+@media (max-width: 512px) {
+  .main-logo-text {
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 480px) {
 
   /* ---------- HEADER ---------- */

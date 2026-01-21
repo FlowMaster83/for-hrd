@@ -1,30 +1,34 @@
 /* =========================================================
-   PNG EXPORT — A4.1 (DESKTOP / MODAL ≥641)
-   DOM-clone approach
-   SPEC: A3 → A4
+   PNG EXPORT — CANONICAL (ALL DEVICES)
+   Fixed render width: 768px
+   Independent from viewport
 ========================================================= */
 
 /* global htmlToImage */
 
-export function exportResultsToPng() {
-  const root = document.querySelector(".modal__content");
+const EXPORT_WIDTH = 768;
 
-  if (!root) {
+export function exportResultsToPng() {
+  // 🔑 Берём контент модалки, даже если UI mobile
+  const source = document.querySelector(".modal__content");
+
+  if (!source) {
     console.error("[PNG] .modal__content not found");
     return;
   }
 
-  // --- CLONE ROOT ---
-  const clone = root.cloneNode(true);
+  // --- CLONE ---
+  const clone = source.cloneNode(true);
 
-  const rect = root.getBoundingClientRect();
+  // --- FORCE CANONICAL WIDTH ---
+  clone.style.width = `${EXPORT_WIDTH}px`;
+  clone.style.minWidth = `${EXPORT_WIDTH}px`;
+  clone.style.maxWidth = `${EXPORT_WIDTH}px`;
 
-  clone.style.width = `${rect.width}px`;
-  clone.style.maxWidth = "none";
-
-  // --- FORCE FULL-HEIGHT RENDER ---
+  // --- UNLIMIT HEIGHT ---
   clone.style.maxHeight = "none";
   clone.style.height = "auto";
+  clone.style.overflow = "visible";
 
   const body = clone.querySelector(".modal__body");
   if (body) {
@@ -33,22 +37,22 @@ export function exportResultsToPng() {
     body.style.overflow = "visible";
   }
 
-  // --- REMOVE UI CONTROLS FROM CLONE ---
-  const closeBtn = clone.querySelector(".modal-close-btn");
-  if (closeBtn) closeBtn.remove();
+  // --- REMOVE UI CONTROLS ---
+  clone.querySelector(".modal-close-btn")?.remove();
 
   // --- SANDBOX ---
   const sandbox = document.createElement("div");
   sandbox.style.position = "fixed";
   sandbox.style.left = "-10000px";
   sandbox.style.top = "0";
+  sandbox.style.width = `${EXPORT_WIDTH}px`;
   sandbox.style.pointerEvents = "none";
   sandbox.style.opacity = "0";
 
   sandbox.appendChild(clone);
   document.body.appendChild(sandbox);
 
-  // --- EXPORT PNG ---
+  // --- EXPORT ---
   htmlToImage
     .toPng(clone, {
       pixelRatio: 2,
@@ -59,7 +63,7 @@ export function exportResultsToPng() {
       downloadPng(dataUrl, "results.png");
     })
     .catch((err) => {
-      console.error("[PNG][A4.1] export failed", err);
+      console.error("[PNG] export failed", err);
     })
     .finally(() => {
       sandbox.remove();
@@ -67,91 +71,7 @@ export function exportResultsToPng() {
 }
 
 /* =========================================================
-   PNG EXPORT — A4.2 (MOBILE / DEVICE ≤640)
-   DOM-root: #scales-container
-   SPEC: A4.2
-========================================================= */
-
-export function exportResultsToPngMobile() {
-  const root = document.querySelector("#scales-container");
-
-  if (!root) {
-    console.error("[PNG][A4.2] #scales-container not found");
-    return;
-  }
-
-  // --- CLONE ROOT ---
-  const clone = root.cloneNode(true);
-
-  // --- COPY THEME FROM DOCUMENT (LIGHT / DARK) ---
-  const theme = document.documentElement.getAttribute("data-theme");
-  if (theme) {
-    clone.setAttribute("data-theme", theme);
-  }
-
-  const computed = getComputedStyle(document.body);
-  clone.style.background = computed.backgroundColor;
-  clone.style.color = computed.color;
-  clone.style.padding = "12px"; // чтобы не прилипало к краю
-
-  // --- REMOVE UI CONTROLS FROM EACH SCALE ---
-  clone.querySelectorAll(".actions").forEach((el) => el.remove());
-  clone.querySelectorAll(".user-input").forEach((el) => el.remove());
-
-  // --- REMOVE SCALE TICKS (0 / 50 / 100) ---
-  clone.querySelectorAll(".tick, .tick-line").forEach((el) => el.remove());
-
-  clone.querySelectorAll(".scale-row").forEach((row) => {
-    row.style.marginBottom = "0";
-    row.style.rowGap = "0";
-  });
-
-  clone.querySelectorAll(".scale-row .value").forEach((el) => {
-    el.style.marginBottom = "0";
-    el.style.paddingBottom = "0";
-  });
-
-  // --- FIXED VERTICAL RHYTHM FOR DOCUMENT ---
-  clone.style.display = "flex";
-  clone.style.flexDirection = "column";
-  clone.style.gap = "8px";
-
-  // --- REMOVE HEIGHT / SCROLL LIMITS ---
-  clone.style.maxHeight = "none";
-  clone.style.height = "auto";
-  clone.style.overflow = "visible";
-
-  // --- SANDBOX ---
-  const sandbox = document.createElement("div");
-  sandbox.style.position = "fixed";
-  sandbox.style.left = "-10000px";
-  sandbox.style.top = "0";
-  sandbox.style.pointerEvents = "none";
-  sandbox.style.opacity = "0";
-
-  sandbox.appendChild(clone);
-  document.body.appendChild(sandbox);
-
-  // --- EXPORT PNG ---
-  htmlToImage
-    .toPng(clone, {
-      pixelRatio: 2,
-      cacheBust: false,
-      skipFonts: true,
-    })
-    .then((dataUrl) => {
-      downloadPng(dataUrl, "results_device.png");
-    })
-    .catch((err) => {
-      console.error("[PNG][A4.2] export failed", err);
-    })
-    .finally(() => {
-      sandbox.remove();
-    });
-}
-
-/* =========================================================
-   DOWNLOAD HELPER
+   DOWNLOAD
 ========================================================= */
 
 function downloadPng(dataUrl, filename) {
