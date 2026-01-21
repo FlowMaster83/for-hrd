@@ -1,78 +1,65 @@
-/* =========================================================
-   PNG EXPORT — CANONICAL (ALL DEVICES)
-   Fixed render width: 768px
-   Independent from viewport
-========================================================= */
+import { renderModalResults } from "../modal/modalContent.js";
 
 /* global htmlToImage */
 
 const EXPORT_WIDTH = 768;
 
 export function exportResultsToPng() {
-  // 🔑 Берём контент модалки, даже если UI mobile
-  const source = document.querySelector(".modal__content");
+  // --- BUILD VIRTUAL DOCUMENT ---
+  const exportRoot = document.createElement("div");
+  exportRoot.className = "modal__content";
 
-  if (!source) {
-    console.error("[PNG] .modal__content not found");
-    return;
-  }
+  exportRoot.style.width = `${EXPORT_WIDTH}px`;
+  exportRoot.style.minWidth = `${EXPORT_WIDTH}px`;
+  exportRoot.style.maxWidth = `${EXPORT_WIDTH}px`;
+  exportRoot.style.background = "var(--modal-bg-color)";
+  exportRoot.style.borderRadius = "8px";
+  exportRoot.style.overflow = "visible";
 
-  // --- CLONE ---
-  const clone = source.cloneNode(true);
+  // --- BODY ---
+  const body = document.createElement("div");
+  body.className = "modal__body";
+  body.style.maxHeight = "none";
+  body.style.overflow = "visible";
 
-  // --- FORCE CANONICAL WIDTH ---
-  clone.style.width = `${EXPORT_WIDTH}px`;
-  clone.style.minWidth = `${EXPORT_WIDTH}px`;
-  clone.style.maxWidth = `${EXPORT_WIDTH}px`;
-
-  // --- UNLIMIT HEIGHT ---
-  clone.style.maxHeight = "none";
-  clone.style.height = "auto";
-  clone.style.overflow = "visible";
-
-  const body = clone.querySelector(".modal__body");
-  if (body) {
-    body.style.maxHeight = "none";
-    body.style.height = "auto";
-    body.style.overflow = "visible";
-  }
-
-  // --- REMOVE UI CONTROLS ---
-  clone.querySelector(".modal-close-btn")?.remove();
+  const { content } = renderModalResults();
+  body.appendChild(content);
+  exportRoot.appendChild(body);
 
   // --- SANDBOX ---
   const sandbox = document.createElement("div");
-  sandbox.style.position = "fixed";
+  sandbox.style.position = "absolute";
   sandbox.style.left = "-10000px";
   sandbox.style.top = "0";
+  sandbox.style.height = "auto";
   sandbox.style.width = `${EXPORT_WIDTH}px`;
   sandbox.style.pointerEvents = "none";
   sandbox.style.opacity = "0";
 
-  sandbox.appendChild(clone);
+  sandbox.appendChild(exportRoot);
   document.body.appendChild(sandbox);
+
+  exportRoot.style.position = "static";
+  exportRoot.style.height = "auto";
+  exportRoot.style.maxHeight = "none";
+
+  // --- FORCE LAYOUT & MEASURE ---
+  const rect = exportRoot.getBoundingClientRect();
+  exportRoot.style.height = `${rect.height}px`;
 
   // --- EXPORT ---
   htmlToImage
-    .toPng(clone, {
+    .toPng(exportRoot, {
       pixelRatio: 2,
-      cacheBust: false,
       skipFonts: true,
     })
     .then((dataUrl) => {
       downloadPng(dataUrl, "results.png");
     })
-    .catch((err) => {
-      console.error("[PNG] export failed", err);
-    })
     .finally(() => {
       sandbox.remove();
     });
 }
-
-/* =========================================================
-   DOWNLOAD
-========================================================= */
 
 function downloadPng(dataUrl, filename) {
   const link = document.createElement("a");
