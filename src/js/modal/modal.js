@@ -1,6 +1,6 @@
 // src/js/modal/modal.js
 import { renderModalResults } from "./modalContent.js";
-import { exportResultsToPng } from "../outerContent/png.js";
+import { exportResultsToPng } from "../outerContent/screen.js";
 import { printResults } from "../outerContent/print.js";
 
 /* =========================================================

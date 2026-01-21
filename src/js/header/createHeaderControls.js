@@ -3,7 +3,7 @@
 import { createThemeToggleButton } from "../theme/themeButton.js";
 import { resetAllScales } from "../state/scaleRegistry.js";
 import { modalAutoClosed } from "../modal/modal.js";
-import { exportResultsToPng } from "../outerContent/png.js";
+import { exportResultsToPng } from "../outerContent/screen.js";
 
 const MAX = 100;
 const STEP = 1;
@@ -173,7 +173,7 @@ export function createHeaderControls(rootId) {
       input.value = next;
       applyValueToAllScales(next);
     },
-    { passive: false }
+    { passive: false },
   );
 
   /* CLEAR ALL */
@@ -189,10 +189,10 @@ export function createHeaderControls(rootId) {
     label,
     input,
     resultBtn, // ≥641
-    pngBtn,    // ≤640
+    pngBtn, // ≤640
     clearBtn,
     langBtn,
-    themeContainer
+    themeContainer,
   );
 
   root.appendChild(wrapper);
