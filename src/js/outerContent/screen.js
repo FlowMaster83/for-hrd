@@ -4,7 +4,40 @@ import { renderModalResults } from "../modal/modalContent.js";
 
 const EXPORT_WIDTH = 768;
 
-export function exportResultsToPng() {
+/* =========================================================
+   UTILS
+========================================================= */
+
+function waitForImages(root) {
+  const images = root.querySelectorAll("img");
+
+  return Promise.all(
+    Array.from(images).map((img) => {
+      // если изображение уже загружено и валидно
+      if (img.complete && img.naturalWidth !== 0) {
+        return Promise.resolve();
+      }
+
+      // ждём загрузку или ошибку
+      return new Promise((resolve) => {
+        img.onload = img.onerror = resolve;
+      });
+    }),
+  );
+}
+
+function downloadPng(dataUrl, filename) {
+  const link = document.createElement("a");
+  link.href = dataUrl;
+  link.download = filename;
+  link.click();
+}
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+export async function exportResultsToPng() {
   // --- BUILD VIRTUAL DOCUMENT ---
   const exportRoot = document.createElement("div");
   exportRoot.className = "modal__content";
@@ -47,22 +80,23 @@ export function exportResultsToPng() {
   const rect = exportRoot.getBoundingClientRect();
   exportRoot.style.height = `${rect.height}px`;
 
-  // --- EXPORT ---
-  htmlToImage
-    .toPng(exportRoot, {
-      pixelRatio: 2,
-    })
-    .then((dataUrl) => {
-      downloadPng(dataUrl, "results.png");
-    })
-    .finally(() => {
-      sandbox.remove();
-    });
-}
+  // --- IMAGE RELOAD SAFETY (ОДНА СТРОКА) ---
+  exportRoot.querySelectorAll("img").forEach((img) => {
+    img.src = img.src;
+  });
 
-function downloadPng(dataUrl, filename) {
-  const link = document.createElement("a");
-  link.href = dataUrl;
-  link.download = filename;
-  link.click();
+  // --- WAIT FOR IMAGES ---
+  await waitForImages(exportRoot);
+
+  // --- EXPORT ---
+  try {
+    const dataUrl = await htmlToImage.toPng(exportRoot, {
+      pixelRatio: 2,
+      skipFonts: true,
+    });
+
+    downloadPng(dataUrl, "results.png");
+  } finally {
+    sandbox.remove();
+  }
 }
