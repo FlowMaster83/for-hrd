@@ -84,8 +84,11 @@
 
   border-radius: 6px;
   border: 1px solid var(--border-color);
-  background: var(--button-result-background-color);
-  color: var(--button-result-text);
+  background-color: var(--button-result-background-color);
+  color: var(--button-text-color);
+
+  outline: none;
+  box-shadow: none;
 
   cursor: pointer;
   white-space: nowrap;
@@ -98,6 +101,31 @@
 .header-result-btn:active {
   transform: translateY(1px);
 }
+
+.header-result-btn:focus,
+.header-result-btn:focus-visible,
+.header-result-btn:active {
+  outline: none;
+  box-shadow: none;
+}
+
+
+/* RESULT — состояние при открытой модалке */
+.header-result-btn.is-modal-open {
+  background-color: var(--button-result-background-color);
+  color: var(--button-result-text);
+
+  outline: none;
+  box-shadow: none;
+}
+
+/* убираем влияние focus/active */
+.header-result-btn.is-modal-open:focus,
+.header-result-btn.is-modal-open:active {
+  outline: none;
+  box-shadow: none;
+}
+
 
 /* === PNG BUTTON === */
 

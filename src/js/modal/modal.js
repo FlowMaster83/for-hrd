@@ -3,6 +3,22 @@ import { renderModalResults } from "./modalContent.js";
 import { exportResultsToPng } from "../outerContent/screen.js";
 import { printResults } from "../outerContent/print.js";
 
+function syncResultButton(isOpen) {
+  const btn = document.querySelector(".header-result-btn");
+  if (!btn) return;
+
+  btn.classList.toggle("is-modal-open", isOpen);
+}
+
+function resetResultButton() {
+  const btn = document.querySelector(".header-result-btn");
+  if (!btn) return;
+
+  const clone = btn.cloneNode(true);
+  btn.replaceWith(clone);
+}
+
+
 /* =========================================================
    CONFIG
 ========================================================= */
@@ -124,6 +140,9 @@ export function openModal() {
   modal.classList.add("is-open");
   modal.setAttribute("aria-hidden", "false");
 
+  document.querySelector(".header-result-btn")?.blur();
+  syncResultButton(true);
+
   modal.querySelector(".modal-close-btn")?.focus();
 }
 
@@ -143,6 +162,8 @@ export function closeModal() {
   modalRoot.setAttribute("aria-hidden", "true");
 
   modalRoot.querySelector(".modal__body").innerHTML = "";
+
+  resetResultButton();
 
   // восстановление скролла
   document.body.style.position = "";
@@ -183,8 +204,14 @@ window.addEventListener("resize", () => {
     return;
   }
 
-  // 🔑 возврат выше 640 — сброс защитного флага
+  // 🔑 КАНОНИЧЕСКАЯ СИНХРОНИЗАЦИЯ
   if (isModalAllowed()) {
     modalAutoClosed = false;
+
+    // если модалка не открыта — кнопка ОБЯЗАНА быть "ДО клика"
+    if (!isModalOpen()) {
+      resetResultButton();
+    }
   }
 });
+
