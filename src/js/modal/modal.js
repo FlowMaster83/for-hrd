@@ -175,13 +175,16 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/**
- * ≤640px — модалки не существует
- * автозакрытие фиксируем флагом
- */
 window.addEventListener("resize", () => {
+  // уходим в mobile — автозакрытие
   if (!isModalAllowed() && isModalOpen()) {
     modalAutoClosed = true;
     closeModal();
+    return;
+  }
+
+  // 🔑 возврат выше 640 — сброс защитного флага
+  if (isModalAllowed()) {
+    modalAutoClosed = false;
   }
 });
