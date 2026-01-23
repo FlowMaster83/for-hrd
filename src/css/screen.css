@@ -1,9 +1,29 @@
-/* screen.css */
-html.is-exporting-screen {
-  --screen-content-width: 728px; /* эталон 768 */
+/* =========================================================
+   SCREEN EXPORT MODE — CANONICAL (768)
+   Работает:
+   - на html.is-exporting-screen
+   - внутри sandbox .is-exporting-screen
+========================================================= */
+
+/* ---------- ROOT TOKENS ---------- */
+
+html.is-exporting-screen,
+.is-exporting-screen {
+  --screen-content-width: 728px; /* эталон для 768 */
 }
 
-html.is-exporting-screen .layout {
+/* ---------- GLOBAL VIEWPORT ANCHOR ---------- */
+
+html.is-exporting-screen,
+.is-exporting-screen {
+  width: 768px !important;
+  min-width: 768px !important;
+}
+
+/* ---------- MAIN LAYOUT ---------- */
+
+html.is-exporting-screen .layout,
+.is-exporting-screen .layout {
   width: var(--screen-content-width) !important;
   max-width: var(--screen-content-width) !important;
   min-width: var(--screen-content-width) !important;
@@ -15,7 +35,10 @@ html.is-exporting-screen .layout {
   padding-right: var(--layout-padding);
 }
 
-html.is-exporting-screen .modal__wrap {
+/* ---------- MODAL WRAP ---------- */
+
+html.is-exporting-screen .modal__wrap,
+.is-exporting-screen .modal__wrap {
   width: auto !important;
   max-width: none !important;
 
@@ -23,43 +46,55 @@ html.is-exporting-screen .modal__wrap {
   transform: translateX(-50%);
 }
 
-html.is-exporting-screen .modal__content {
+/* ---------- MODAL CONTENT ---------- */
+
+html.is-exporting-screen .modal__content,
+.is-exporting-screen .modal__content {
   width: var(--screen-content-width) !important;
   max-width: var(--screen-content-width) !important;
   min-width: var(--screen-content-width) !important;
 }
 
-html.is-exporting-screen body {
-  overflow-x: hidden;
-}
+/* ---------- MODAL BODY ---------- */
 
-html.is-exporting-screen .modal__body {
+html.is-exporting-screen .modal__body,
+.is-exporting-screen .modal__body {
   max-width: none !important;
+  padding-left: 64px !important;
+  padding-right: 64px !important;
 }
 
-html.is-exporting-screen .scale-row {
+/* ---------- RESULTS GRID ---------- */
+
+html.is-exporting-screen .result-row,
+.is-exporting-screen .result-row {
+  grid-template-columns: 200px 1fr !important;
+  column-gap: 24px !important;
+}
+
+/* ---------- SCALE ROW ---------- */
+
+html.is-exporting-screen .scale-row,
+.is-exporting-screen .scale-row {
   grid-template-columns: 200px 1fr !important;
   grid-template-areas: "label value" !important;
   row-gap: 0 !important;
 }
 
-html.is-exporting-screen .modal__body {
-  padding-left: 64px !important;
-  padding-right: 64px !important;
-}
-
-html.is-exporting-screen .result-row {
-  grid-template-columns: 200px 1fr !important;
-  column-gap: 24px !important;
-}
+/* ---------- FULL SCALE (NO MOBILE SIMPLIFICATION) ---------- */
 
 html.is-exporting-screen .tick,
 html.is-exporting-screen .tick-line,
-html.is-exporting-screen .chart-track::before {
+html.is-exporting-screen .chart-track::before,
+.is-exporting-screen .tick,
+.is-exporting-screen .tick-line,
+.is-exporting-screen .chart-track::before {
   display: block !important;
 }
 
-html.is-exporting-screen {
-  width: 768px !important;
-  min-width: 768px !important;
+/* ---------- SAFETY ---------- */
+
+html.is-exporting-screen body,
+.is-exporting-screen body {
+  overflow-x: hidden;
 }

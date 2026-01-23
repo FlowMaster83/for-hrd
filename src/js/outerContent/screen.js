@@ -36,7 +36,7 @@ function downloadPng(dataUrl, filename) {
 ========================================================= */
 
 export async function exportResultsToPng() {
-  document.documentElement.classList.add("is-exporting-screen");
+  let sandbox;
 
   try {
     const exportRoot = document.createElement("div");
@@ -55,7 +55,8 @@ export async function exportResultsToPng() {
     body.appendChild(content);
     exportRoot.appendChild(body);
 
-    const sandbox = document.createElement("div");
+    sandbox = document.createElement("div");
+    sandbox.className = "is-exporting-screen";
     sandbox.style.position = "absolute";
     sandbox.style.left = "-10000px";
     sandbox.style.top = "0";
@@ -84,8 +85,8 @@ export async function exportResultsToPng() {
     });
 
     downloadPng(dataUrl, "results.png");
-    sandbox.remove();
+
   } finally {
-    document.documentElement.classList.remove("is-exporting-screen");
+    if (sandbox) sandbox.remove();
   }
 }
