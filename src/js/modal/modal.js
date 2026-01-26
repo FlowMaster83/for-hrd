@@ -82,9 +82,9 @@ function createModal() {
   data-action="screen"
   aria-label="Make screenshot"
 >
-  <svg viewBox="0 0 2048 2048" aria-hidden="true">
-    <use href="#icon-screen"></use>
-  </svg>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<use href="#icon-screen"></use>
+</svg>
 </button>
 
         
@@ -104,7 +104,7 @@ function createModal() {
 
   /* PNG */
 
-  const pngButton = modal.querySelector('[data-action="png"]');
+  const pngButton = modal.querySelector('[data-action="screen"]');
 
   if (pngButton) {
     pngButton.addEventListener("click", () => {

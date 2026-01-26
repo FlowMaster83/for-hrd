@@ -124,6 +124,10 @@
 
 @media (max-width: 480px) {
 
+  .main-logo-text {
+    font-size: 12px;
+  }
+
   /* ---------- HEADER ---------- */
   .header {
     position: fixed;
@@ -234,10 +238,6 @@
     display: block;
   }
 
-  .main-logo-text {
-    font-size: 10px;
-  }
-
   .btn__label {
     display: none;
   }
@@ -269,6 +269,12 @@
     display: inline-flex;
     width: 16px;
     height: 16px;
+  }
+}
+
+@media (max-width: 450px) {
+  .main-logo-text {
+    font-size: 10px;
   }
 }
 

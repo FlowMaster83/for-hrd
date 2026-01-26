@@ -112,7 +112,14 @@ export function createHeaderControls(rootId) {
   const pngBtn = document.createElement("button");
   pngBtn.className = "header-png-btn";
   pngBtn.type = "button";
-  pngBtn.textContent = "SCREEN";
+  pngBtn.classList.add("header-btn--icon");
+  pngBtn.setAttribute("aria-label", "Make screenshot");
+
+  pngBtn.innerHTML = `
+  <svg viewBox="0 0 2048 2048" aria-hidden="true">
+    <use href="#icon-screen"></use>
+  </svg>
+`;
 
   pngBtn.addEventListener("click", () => {
     exportResultsToPng();

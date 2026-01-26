@@ -142,8 +142,31 @@
 }
 
 .modal-action-btn--icon svg {
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
+}
+
+/* ---------- MODAL SCREEN BUTTON ---------- */
+
+.modal-action-btn[data-action="screen"] {
+  height: 72px;
+  padding: 0 18px;
+}
+
+.modal-action-btn[data-action="screen"] svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* сделать PRINT ниже */
+.modal-action-btn[data-action="print"] {
+  height: 40px;
+  padding: 0 18px;
+}
+
+.modal-action-btn[data-action="print"] svg {
+  width: 22px;
+  height: 22px;
 }
 
 .modal-action-btn {
